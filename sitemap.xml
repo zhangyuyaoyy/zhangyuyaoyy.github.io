@@ -2,10 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>xxx/categories/</loc>
+    <loc>https://zhangyuyaoyy.gitee.io/categories/</loc>
   </url><url>
-    <loc>xxx/tags/</loc>
+    <loc>https://zhangyuyaoyy.gitee.io/tags/</loc>
   </url><url>
-    <loc>xxx/</loc>
+    <loc>https://zhangyuyaoyy.gitee.io/</loc>
   </url>
 </urlset>
