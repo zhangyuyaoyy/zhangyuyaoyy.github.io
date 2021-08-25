@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on zhaangyuyao的博客</title>
-    <link>xxx/post/</link>
+    <link>https://zhangyuyaoyy.gitee.io/post/</link>
     <description>Recent content in Posts on zhaangyuyao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 25 Aug 2021 14:30:49 +0800</lastBuildDate><atom:link href="xxx/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 25 Aug 2021 14:30:49 +0800</lastBuildDate><atom:link href="https://zhangyuyaoyy.gitee.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Blog_name</title>
-      <link>xxx/post/blog_name/</link>
+      <link>https://zhangyuyaoyy.gitee.io/post/blog_name/</link>
       <pubDate>Wed, 25 Aug 2021 14:30:49 +0800</pubDate>
       
-      <guid>xxx/post/blog_name/</guid>
+      <guid>https://zhangyuyaoyy.gitee.io/post/blog_name/</guid>
       <description>this is first test </description>
     </item>
     
