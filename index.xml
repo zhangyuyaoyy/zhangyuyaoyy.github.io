@@ -4,7 +4,14 @@
         <link>https://zhangyuyaoyy.gitee.io/</link>
         <description>zhangyuyao的个人博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>20431508@qq.com (zhangyuyao)</managingEditor>
-            <webMaster>20431508@qq.com (zhangyuyao)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+            <webMaster>20431508@qq.com (zhangyuyao)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 26 Aug 2021 14:15:15 &#43;0800</lastBuildDate>
             <atom:link href="https://zhangyuyaoyy.gitee.io/index.xml" rel="self" type="application/rss+xml" />
-        </channel>
+        <item>
+    <title>JVM</title>
+    <link>https://zhangyuyaoyy.gitee.io/jvm/</link>
+    <pubDate>Thu, 26 Aug 2021 14:15:15 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://zhangyuyaoyy.gitee.io/jvm/</guid>
+    <description><![CDATA[JVM组成 ]]></description>
+</item></channel>
 </rss>
