@@ -10,8 +10,6 @@
     <pubDate>Thu, 26 Aug 2021 14:15:15 &#43;0800</pubDate>
     <author>作者</author>
     <guid>https://zhangyuyaoyy.gitee.io/jvm/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/common/java.svg" referrerpolicy="no-referrer">
-            </div><p>本内容根据B站<a href="https://www.bilibili.com/video/BV1yE411Z7AP" target="_blank" rel="noopener noreffer">黑马程序员JVM完整教程</a>整理记录。</p>]]></description>
+    <description><![CDATA[<p>本内容根据B站<a href="https://www.bilibili.com/video/BV1yE411Z7AP" target="_blank" rel="noopener noreffer">黑马程序员JVM完整教程</a>整理记录。</p>]]></description>
 </item></channel>
 </rss>
