@@ -6,7 +6,7 @@
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>JVM - zhangyuyao</title><meta name="Description" content="zhangyuyao的个人博客"><meta property="og:title" content="JVM" />
-<meta property="og:description" content="JVM组成 " />
+<meta property="og:description" content="本内容根据B站黑马程序员JVM完整教程整理记录。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://zhangyuyaoyy.gitee.io/jvm/" /><meta property="og:image" content="https://zhangyuyaoyy.gitee.io/logo.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-08-26T14:15:15+08:00" />
@@ -16,7 +16,7 @@
 <meta name="twitter:image" content="https://zhangyuyaoyy.gitee.io/logo.png"/>
 
 <meta name="twitter:title" content="JVM"/>
-<meta name="twitter:description" content="JVM组成 "/>
+<meta name="twitter:description" content="本内容根据B站黑马程序员JVM完整教程整理记录。"/>
 <meta name="application-name" content="zhangyuyao">
 <meta name="apple-mobile-web-app-title" content="zhangyuyao"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/"
-        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","wordcount":  1 ,
+        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  52 ,
         "url": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/","datePublished": "2021-08-26T14:15:15+08:00","dateModified": "2021-08-26T14:15:15+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "zhangyuyao","logo": "https:\/\/zhangyuyaoyy.gitee.io\/images\/avatar.png"},"author": {
@@ -105,8 +105,8 @@
             <h2 class="toc-title">目录</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">JVM</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1 字&nbsp;
+            <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%9D%A2%E8%AF%95/"><i class="far fa-folder fa-fw"></i>面试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 52 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -116,9 +116,34 @@
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
     <li><a href="#jvm组成">JVM组成</a></li>
+    <li><a href="#内存结构">内存结构</a>
+      <ul>
+        <li><a href="#程序计数器">程序计数器</a></li>
+        <li><a href="#虚拟机栈">虚拟机栈</a>
+          <ul>
+            <li><a href="#定义">定义</a></li>
+            <li><a href="#问题辨析">问题辨析</a></li>
+            <li><a href="#栈内存溢出">栈内存溢出</a></li>
+            <li><a href="#线程诊断">线程诊断</a></li>
+          </ul>
+        </li>
+        <li><a href="#本地方法栈">本地方法栈</a>
+          <ul>
+            <li><a href="#定义-1">定义</a></li>
+          </ul>
+        </li>
+        <li><a href="#堆">堆</a>
+          <ul>
+            <li><a href="#定义-2">定义</a></li>
+            <li><a href="#堆内存溢出">堆内存溢出</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="jvm组成">JVM组成</h2>
+            </div><div class="content" id="content"><p>本内容根据B站<a href="https://www.bilibili.com/video/BV1yE411Z7AP" target="_blank" rel="noopener noreffer">黑马程序员JVM完整教程</a>整理记录。</p>
+<h2 id="jvm组成">JVM组成</h2>
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -127,7 +152,77 @@
         data-sizes="auto"
         alt="/images/JVM组成.png"
         title="avator" /></p>
-</div><div class="post-footer" id="post-footer">
+<h2 id="内存结构">内存结构</h2>
+<h3 id="程序计数器">程序计数器</h3>
+<p>程序计数器通过寄存器实现</p>
+<p>作用：记录下一条JVM指令执行的地址</p>
+<p>特点：</p>
+<ul>
+<li>线程私有</li>
+<li>不会线程溢出</li>
+</ul>
+<h3 id="虚拟机栈">虚拟机栈</h3>
+<h4 id="定义">定义</h4>
+<ul>
+<li>栈：线程运行时需要的内存空间。</li>
+<li>栈帧：方法运行时需要的内存空间。</li>
+<li>每个栈由多个栈帧组成，对应着每次方法调用时所占用的内存。</li>
+<li>每个线程只能有一个活动栈帧，对应这当前正在执行的那个方法。</li>
+</ul>
+<h4 id="问题辨析">问题辨析</h4>
+<ol>
+<li>GC是否会回收栈内存？
+<ul>
+<li>GC只会回收堆内存里的对象。</li>
+</ul>
+</li>
+<li>栈内存是否越大越好？
+<ul>
+<li>分配太大会导致线程数量减少。</li>
+</ul>
+</li>
+<li>方法内的局部变量是否是线程安全？
+<ul>
+<li>如果方法内变量没有逃离方法的作用范围，它就是线程安全的。</li>
+</ul>
+</li>
+</ol>
+<h4 id="栈内存溢出">栈内存溢出</h4>
+<p>通过-Xss设置栈内存，默认1024k。</p>
+<ol>
+<li>栈帧过多；</li>
+<li>栈帧过大。</li>
+</ol>
+<h4 id="线程诊断">线程诊断</h4>
+<ol>
+<li>CPU占用过多
+<ul>
+<li>定位：
+<ul>
+<li>top定位进程；</li>
+<li>ps H -ep pid, tid, %cpu | grep pid 定位线程；</li>
+<li>jstack pid。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>程序长时间没有输出结果
+<ul>
+<li>jstack pid</li>
+</ul>
+</li>
+</ol>
+<h3 id="本地方法栈">本地方法栈</h3>
+<h4 id="定义-1">定义</h4>
+<ul>
+<li>为本地方法提供内存空间</li>
+</ul>
+<h3 id="堆">堆</h3>
+<h4 id="定义-2">定义</h4>
+<ul>
+<li>通过new关键字创建的对象，都会使用堆内存</li>
+</ul>
+<h4 id="堆内存溢出">堆内存溢出</h4></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
@@ -146,7 +241,7 @@
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">java</a>,&nbsp;<a href="/tags/jvm/">jvm</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
         </section>

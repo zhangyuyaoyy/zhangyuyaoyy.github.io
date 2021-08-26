@@ -2,8 +2,11 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
+            <loc>https://zhangyuyaoyy.gitee.io/categories/</loc><lastmod>2021-08-26T14:15:15&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://zhangyuyaoyy.gitee.io/tags/java/</loc><lastmod>2021-08-26T14:15:15&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://zhangyuyaoyy.gitee.io/jvm/</loc><lastmod>2021-08-26T14:15:15&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://zhangyuyaoyy.gitee.io/tags/jvm/</loc><lastmod>2021-08-26T14:15:15&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://zhangyuyaoyy.gitee.io/posts/</loc><lastmod>2021-08-26T14:15:15&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://zhangyuyaoyy.gitee.io/tags/</loc><lastmod>2021-08-26T14:15:15&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://zhangyuyaoyy.gitee.io/</loc><lastmod>2021-08-26T14:15:15&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://zhangyuyaoyy.gitee.io/categories/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://zhangyuyaoyy.gitee.io/tags/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url></urlset>
+            <loc>https://zhangyuyaoyy.gitee.io/categories/%E9%9D%A2%E8%AF%95/</loc><lastmod>2021-08-26T14:15:15&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url></urlset>

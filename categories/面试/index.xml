@@ -1,12 +1,10 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>zhangyuyao</title>
-        <link>https://zhangyuyaoyy.gitee.io/</link>
-        <description>zhangyuyao的个人博客</description>
+        <title>面试 - 分类 - zhangyuyao</title>
+        <link>https://zhangyuyaoyy.gitee.io/categories/%E9%9D%A2%E8%AF%95/</link>
+        <description>面试 - 分类 - zhangyuyao</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>20431508@qq.com (zhangyuyao)</managingEditor>
-            <webMaster>20431508@qq.com (zhangyuyao)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 26 Aug 2021 14:15:15 &#43;0800</lastBuildDate>
-            <atom:link href="https://zhangyuyaoyy.gitee.io/index.xml" rel="self" type="application/rss+xml" />
-        <item>
+            <webMaster>20431508@qq.com (zhangyuyao)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 26 Aug 2021 14:15:15 &#43;0800</lastBuildDate><atom:link href="https://zhangyuyaoyy.gitee.io/categories/%E9%9D%A2%E8%AF%95/" rel="self" type="application/rss+xml" /><item>
     <title>JVM</title>
     <link>https://zhangyuyaoyy.gitee.io/jvm/</link>
     <pubDate>Thu, 26 Aug 2021 14:15:15 &#43;0800</pubDate>
