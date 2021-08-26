@@ -3,5 +3,5 @@
 
 ## JVM组成
 
-![avator](/static/JVM组成.png)
+![avator](/images/JVM组成.png)
 
