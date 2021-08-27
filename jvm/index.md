@@ -154,8 +154,22 @@ String s6 = s5.intern();
 - jdk1.8以前
   - StringTable放在永久代中，只有Full GC才可回收内存。
 
+#### StringTable垃圾回收及调优
+
+- 当内存不够时，JVM会对StringTable进行GC
+
+- StringTable由HashTable实现，通过调整HashTable的桶的个数实现调优
+
+  - ```bash
+    -XX:StringTableSize=xxxx
+    ```
+
+- 若引用的字符串对象过多，可以通过将字符串入池实现调优
+
+  - ``` java
+    string.intern()
+    ```
 
 
-​	
 
 

@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/"
-        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  164 ,
+        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  171 ,
         "url": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/","datePublished": "2021-08-26T14:15:15+08:00","dateModified": "2021-08-26T14:15:15+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "zhangyuyao","logo": "https:\/\/zhangyuyaoyy.gitee.io\/images\/avatar.png"},"author": {
@@ -105,8 +105,8 @@
             <h2 class="toc-title">目录</h2>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">JVM</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%9D%A2%E8%AF%95/"><i class="far fa-folder fa-fw"></i>面试</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 164 字&nbsp;
+            <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><i class="far fa-folder fa-fw"></i>学习笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 171 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -154,6 +154,7 @@
           <ul>
             <li><a href="#特性">特性</a></li>
             <li><a href="#stringtable位置">StringTable位置</a></li>
+            <li><a href="#stringtable垃圾回收及调优">StringTable垃圾回收及调优</a></li>
           </ul>
         </li>
       </ul>
@@ -357,7 +358,42 @@
 </ul>
 </li>
 </ul>
-<p>​</p></div><div class="post-footer" id="post-footer">
+<h4 id="stringtable垃圾回收及调优">StringTable垃圾回收及调优</h4>
+<ul>
+<li>
+<p>当内存不够时，JVM会对StringTable进行GC</p>
+</li>
+<li>
+<p>StringTable由HashTable实现，通过调整HashTable的桶的个数实现调优</p>
+<ul>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">-XX:StringTableSize<span class="o">=</span>xxxx
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+<li>
+<p>若引用的字符串对象过多，可以通过将字符串入池实现调优</p>
+<ul>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">string</span><span class="o">.</span><span class="na">intern</span><span class="o">()</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+</ul></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
