@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/"
-        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  313 ,
+        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  391 ,
         "url": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/","datePublished": "2021-08-26T14:15:15+08:00","dateModified": "2021-08-26T14:15:15+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "zhangyuyao","logo": "https:\/\/zhangyuyaoyy.gitee.io\/images\/avatar.png"},"author": {
@@ -108,7 +108,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">JVM</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><i class="far fa-folder fa-fw"></i>学习笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 313 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 391 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -188,7 +188,29 @@
             <li><a href="#相关参数">相关参数</a></li>
           </ul>
         </li>
-        <li><a href="#垃圾回收器">垃圾回收器</a></li>
+        <li><a href="#垃圾回收器">垃圾回收器</a>
+          <ul>
+            <li><a href="#串行">串行</a>
+              <ul>
+                <li><a href="#serial-收集器">Serial 收集器</a></li>
+                <li><a href="#parnew-收集器">ParNew 收集器</a></li>
+                <li><a href="#serial-old-收集器">Serial Old 收集器</a></li>
+              </ul>
+            </li>
+            <li><a href="#吞吐量优先">吞吐量优先</a>
+              <ul>
+                <li><a href="#parallel-scavenge-收集器">Parallel Scavenge 收集器</a></li>
+                <li><a href="#parallel-old-收集器"><strong>Parallel Old 收集器</strong></a></li>
+              </ul>
+            </li>
+            <li><a href="#响应时间优先">响应时间优先</a>
+              <ul>
+                <li><a href="#cms-收集器">CMS 收集器</a></li>
+              </ul>
+            </li>
+            <li><a href="#g1-garbage-first">G.1 Garbage First</a></li>
+          </ul>
+        </li>
         <li><a href="#垃圾回收调优">垃圾回收调优</a></li>
       </ul>
     </li>
@@ -607,6 +629,107 @@ B--&gt;A
 </tbody>
 </table>
 <h3 id="垃圾回收器">垃圾回收器</h3>
+<h4 id="串行">串行</h4>
+<ul>
+<li>
+<p>-XX:+UseSerialGC=serial/serialOld</p>
+</li>
+<li>
+<p>serial作用于新生代，使用复制算法；serialOld作用于老年代，使用标记整理算法。</p>
+</li>
+<li>
+<p>单线程</p>
+</li>
+<li>
+<p>堆内存较小，适合个人电脑</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/%e4%b8%b2%e8%a1%8c.png"
+        data-srcset="/images/%e4%b8%b2%e8%a1%8c.png, /images/%e4%b8%b2%e8%a1%8c.png 1.5x, /images/%e4%b8%b2%e8%a1%8c.png 2x"
+        data-sizes="auto"
+        alt="/images/串行.png"
+        title="avator" /></p>
+<p>安全点**：让其他线程都在这个点停下来，以免垃圾回收时移动对象地址，使得其他线程找不到被移动的对象</p>
+<p>因为是串行的，所以只有一个垃圾回收线程。且在该线程执行回收工作时，其他线程进入<strong>阻塞</strong>状态</p>
+<h5 id="serial-收集器">Serial 收集器</h5>
+<p>Serial收集器是最基本的、发展历史最悠久的收集器</p>
+<p><strong>特点：<strong>单线程、简单高效（与其他收集器的单线程相比），采用</strong>复制算法</strong>。对于限定单个CPU的环境来说，Serial收集器由于没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程手机效率。收集器进行垃圾回收时，必须暂停其他所有的工作线程，直到它结束（Stop The World）</p>
+<h5 id="parnew-收集器">ParNew 收集器</h5>
+<p>ParNew收集器其实就是Serial收集器的多线程版本</p>
+<p><strong>特点</strong>：多线程、ParNew收集器默认开启的收集线程数与CPU的数量相同，在CPU非常多的环境中，可以使用-XX:ParallelGCThreads参数来限制垃圾收集的线程数。和Serial收集器一样存在Stop The World问题</p>
+<h5 id="serial-old-收集器">Serial Old 收集器</h5>
+<p>Serial Old是Serial收集器的老年代版本</p>
+<p><strong>特点</strong>：同样是单线程收集器，采用<strong>标记-整理算法</strong></p>
+</li>
+</ul>
+<h4 id="吞吐量优先">吞吐量优先</h4>
+<ul>
+<li>
+<p>多线程</p>
+</li>
+<li>
+<p>堆内存较大，多核CPU</p>
+</li>
+<li>
+<p>单位时间内，STW时间最短</p>
+</li>
+<li>
+<p>jdk1.8默认</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png"
+        data-srcset="/images/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png, /images/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png 1.5x, /images/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png 2x"
+        data-sizes="auto"
+        alt="/images/吞吐量优先.png"
+        title="avator" /></p>
+<h5 id="parallel-scavenge-收集器">Parallel Scavenge 收集器</h5>
+<p>与吞吐量关系密切，故也称为吞吐量优先收集器</p>
+<p><strong>特点</strong>：属于新生代收集器也是采用<strong>复制算法</strong>的收集器（用到了新生代的幸存区），又是并行的多线程收集器（与ParNew收集器类似）</p>
+<p>该收集器的目标是达到一个可控制的吞吐量。还有一个值得关注的点是：<strong>GC自适应调节策略</strong>（与ParNew收集器最重要的一个区别）</p>
+<p><strong>GC自适应调节策略</strong>：Parallel Scavenge收集器可设置-XX:+UseAdptiveSizePolicy参数。当开关打开时<strong>不需要</strong>手动指定新生代的大小（-Xmn）、Eden与Survivor区的比例（-XX:SurvivorRation）、晋升老年代的对象年龄（-XX:PretenureSizeThreshold）等，虚拟机会根据系统的运行状况收集性能监控信息，动态设置这些参数以提供最优的停顿时间和最高的吞吐量，这种调节方式称为GC的自适应调节策略。</p>
+<p>Parallel Scavenge收集器使用两个参数控制吞吐量：</p>
+<ul>
+<li>XX:MaxGCPauseMillis 控制最大的垃圾收集停顿时间</li>
+<li>XX:GCRatio 直接设置吞吐量的大小</li>
+</ul>
+<h5 id="parallel-old-收集器"><strong>Parallel Old 收集器</strong></h5>
+<p>是Parallel Scavenge收集器的老年代版本</p>
+<p><strong>特点</strong>：多线程，采用<strong>标记-整理算法</strong>（老年代没有幸存区）</p>
+</li>
+</ul>
+<h4 id="响应时间优先">响应时间优先</h4>
+<ul>
+<li>
+<p>多线程</p>
+</li>
+<li>
+<p>堆内存较大，多核CPU</p>
+</li>
+<li>
+<p>垃圾回收时，尽可能让单次STW时间最短</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png"
+        data-srcset="/images/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png, /images/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png 1.5x, /images/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png 2x"
+        data-sizes="auto"
+        alt="/images/响应时间优先.png"
+        title="avator" /></p>
+<h5 id="cms-收集器">CMS 收集器</h5>
+<p>Concurrent Mark Sweep，一种以获取<strong>最短回收停顿时间</strong>为目标的<strong>老年代</strong>收集器</p>
+<p><strong>特点</strong>：基于<strong>标记-清除算法</strong>实现。并发收集、低停顿，但是会产生内存碎片</p>
+<p><strong>应用场景</strong>：适用于注重服务的响应速度，希望系统停顿时间最短，给用户带来更好的体验等场景下。如web程序、b/s服务</p>
+<p><strong>CMS收集器的运行过程分为下列4步：</strong></p>
+<p><strong>初始标记</strong>：标记GC Roots能直接到的对象。速度很快但是<strong>仍存在Stop The World问题</strong></p>
+<p><strong>并发标记</strong>：进行GC Roots Tracing 的过程，找出存活对象且用户线程可并发执行</p>
+<p><strong>重新标记</strong>：为了<strong>修正并发标记期间</strong>因用户程序继续运行而导致标记产生变动的那一部分对象的标记记录。仍然存在Stop The World问题</p>
+<p><strong>并发清除</strong>：对标记的对象进行清除回收</p>
+<p>CMS收集器的内存回收过程是与用户线程一起<strong>并发执行</strong>的</p>
+</li>
+</ul>
+<h4 id="g1-garbage-first">G.1 Garbage First</h4>
 <h3 id="垃圾回收调优">垃圾回收调优</h3></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
