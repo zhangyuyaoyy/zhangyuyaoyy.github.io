@@ -20,7 +20,7 @@
 <meta name="application-name" content="zhangyuyao">
 <meta name="apple-mobile-web-app-title" content="zhangyuyao"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhangyuyaoyy.gitee.io/jvm/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhangyuyaoyy.gitee.io/jvm/" /><link rel="next" href="https://zhangyuyaoyy.gitee.io/leetcode%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/"
-        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  232 ,
+        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  313 ,
         "url": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/","datePublished": "2021-08-26T14:15:15+08:00","dateModified": "2021-08-26T14:15:15+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "zhangyuyao","logo": "https:\/\/zhangyuyaoyy.gitee.io\/images\/avatar.png"},"author": {
@@ -108,7 +108,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">JVM</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><i class="far fa-folder fa-fw"></i>学习笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 232 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 313 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -175,8 +175,19 @@
             <li><a href="#五种引用">五种引用</a></li>
           </ul>
         </li>
-        <li><a href="#垃圾回收算法">垃圾回收算法</a></li>
-        <li><a href="#分代垃圾回收">分代垃圾回收</a></li>
+        <li><a href="#垃圾回收算法">垃圾回收算法</a>
+          <ul>
+            <li><a href="#标记清除">标记清除</a></li>
+            <li><a href="#标记整理标记压缩">标记整理(标记压缩)</a></li>
+            <li><a href="#复制算法">复制算法</a></li>
+          </ul>
+        </li>
+        <li><a href="#分代回收">分代回收</a>
+          <ul>
+            <li><a href="#定义-5">定义</a></li>
+            <li><a href="#相关参数">相关参数</a></li>
+          </ul>
+        </li>
         <li><a href="#垃圾回收器">垃圾回收器</a></li>
         <li><a href="#垃圾回收调优">垃圾回收调优</a></li>
       </ul>
@@ -526,7 +537,75 @@ B--&gt;A
 </li>
 </ol>
 <h3 id="垃圾回收算法">垃圾回收算法</h3>
-<h3 id="分代垃圾回收">分代垃圾回收</h3>
+<h4 id="标记清除">标记清除</h4>
+<p>​		标记-清除算法是现代垃圾回收算法的思想基础。标记-清除算法将垃圾回收分为两个阶段：标记阶段和清除阶段。一种可行的实现是，在标记阶段，首先通过根节点，标记所有从根节点可达对象（可达性分析）。未被标记的对象就是未被引用的垃圾对象。然后再清除阶段，清除所有未被标记的对象（记录地址的起始位置，不会实际清空字节）。</p>
+<p>​		优点：速度快</p>
+<p>​		缺点：会产生内存碎片</p>
+<h4 id="标记整理标记压缩">标记整理(标记压缩)</h4>
+<p>​		标记压缩算法适合于存活对象较多的场合，如老年代。它在标记-清除算法上做了一定的优化。和标记-清除算法一样，标记-压缩算法也首先需要从根节点开始，对所有可达对象做一次标记。但之后，它并不简单的清理未标记对象，而是将所有存活对象压缩到内存的一端。之后清理边界外所有的空间。</p>
+<p>​		优点：不会产生内存碎片</p>
+<p>​		缺点：速度慢</p>
+<h4 id="复制算法">复制算法</h4>
+<p>​		与标记-清除算法相比，复制算法是一个相对高效的回收方法。不适用于存活对象较多的场合。将原有的内存空分为两块，每次只是用其中一块，在垃圾回收时，将正在使用的内存中的存活对象复制到未使用的内存块中。之后清除正在使用的内存块中的所有对象，交换两个内存的角色，完成垃圾回收。</p>
+<p>​		优点：不会有内存碎片</p>
+<p>​		缺点：需要两倍的内存空间</p>
+<h3 id="分代回收">分代回收</h3>
+<h4 id="定义-5">定义</h4>
+<ul>
+<li>对象首先分配在伊甸园区域</li>
+<li>新生代空间不足时，触发 minor gc，伊甸园和 from 存活的对象使用 copy 复制到 to 中，存活的</li>
+<li>对象年龄加 1并且交换 from to</li>
+<li>minor gc 会引发 stop the world，暂停其它用户的线程，等垃圾回收结束，用户线程才恢复运行</li>
+<li>当对象寿命超过阈值时，会晋升至老年代，最大寿命是15（4bit）</li>
+<li>当老年代空间不足，会先尝试触发 minor gc，如果之后空间仍不足，那么触发 full gc，STW的时间更长</li>
+</ul>
+<h4 id="相关参数">相关参数</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">注释</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">堆初始大小</td>
+<td>-Xms</td>
+</tr>
+<tr>
+<td style="text-align:left">堆最大大小</td>
+<td>-Xmx 或 -XX:MaxHeapSize=size</td>
+</tr>
+<tr>
+<td style="text-align:left">新生代大小</td>
+<td>-Xmn 或 (-XX:NewSize=size + -XX:MaxNewSize=size )</td>
+</tr>
+<tr>
+<td style="text-align:left">幸存区比例（动态）</td>
+<td>-XX:InitialSurvivorRatio=ratio 和 -XX:+UseAdaptiveSizePolicy</td>
+</tr>
+<tr>
+<td style="text-align:left">幸存区比例</td>
+<td>-XX:SurvivorRatio=ratio</td>
+</tr>
+<tr>
+<td style="text-align:left">晋升阈值</td>
+<td>-XX:MaxTenuringThreshold=threshold</td>
+</tr>
+<tr>
+<td style="text-align:left">晋升详情</td>
+<td>-XX:+PrintTenuringDistribution</td>
+</tr>
+<tr>
+<td style="text-align:left">GC详情</td>
+<td>-XX:+PrintGCDetails -verbose:gc</td>
+</tr>
+<tr>
+<td style="text-align:left">FullGC 前 MinorGC</td>
+<td>-XX:+ScavengeBeforeFullGC</td>
+</tr>
+</tbody>
+</table>
 <h3 id="垃圾回收器">垃圾回收器</h3>
 <h3 id="垃圾回收调优">垃圾回收调优</h3></div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -553,7 +632,8 @@ B--&gt;A
         </section>
     </div>
 
-    <div class="post-nav"></div>
+    <div class="post-nav">
+            <a href="/leetcode%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/" class="next" rel="next" title="Leetcode算法笔记">Leetcode算法笔记<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
