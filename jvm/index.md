@@ -298,7 +298,7 @@ String s6 = s5.intern();
 
  - 堆内存较小，适合个人电脑
 
-   ![avator](/images/串行.png)
+   ![avator](/images/jvm/串行.png)
 
    安全点**：让其他线程都在这个点停下来，以免垃圾回收时移动对象地址，使得其他线程找不到被移动的对象
 
@@ -332,7 +332,7 @@ String s6 = s5.intern();
 
  - jdk1.8默认
 
-   ![avator](/images/吞吐量优先.png)
+   ![avator](/images/jvm/吞吐量优先.png)
 
    ##### Parallel Scavenge 收集器
 
@@ -363,7 +363,7 @@ String s6 = s5.intern();
 
  - 垃圾回收时，尽可能让单次STW时间最短
 
-   ![avator](/images/响应时间优先.png)
+   ![avator](/images/jvm/响应时间优先.png)
 
    ##### CMS 收集器
 

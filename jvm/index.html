@@ -645,10 +645,10 @@ B--&gt;A
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/images/%e4%b8%b2%e8%a1%8c.png"
-        data-srcset="/images/%e4%b8%b2%e8%a1%8c.png, /images/%e4%b8%b2%e8%a1%8c.png 1.5x, /images/%e4%b8%b2%e8%a1%8c.png 2x"
+        data-src="/images/jvm/%e4%b8%b2%e8%a1%8c.png"
+        data-srcset="/images/jvm/%e4%b8%b2%e8%a1%8c.png, /images/jvm/%e4%b8%b2%e8%a1%8c.png 1.5x, /images/jvm/%e4%b8%b2%e8%a1%8c.png 2x"
         data-sizes="auto"
-        alt="/images/串行.png"
+        alt="/images/jvm/串行.png"
         title="avator" /></p>
 <p>安全点**：让其他线程都在这个点停下来，以免垃圾回收时移动对象地址，使得其他线程找不到被移动的对象</p>
 <p>因为是串行的，所以只有一个垃圾回收线程。且在该线程执行回收工作时，其他线程进入<strong>阻塞</strong>状态</p>
@@ -679,10 +679,10 @@ B--&gt;A
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/images/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png"
-        data-srcset="/images/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png, /images/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png 1.5x, /images/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png 2x"
+        data-src="/images/jvm/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png"
+        data-srcset="/images/jvm/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png, /images/jvm/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png 1.5x, /images/jvm/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png 2x"
         data-sizes="auto"
-        alt="/images/吞吐量优先.png"
+        alt="/images/jvm/吞吐量优先.png"
         title="avator" /></p>
 <h5 id="parallel-scavenge-收集器">Parallel Scavenge 收集器</h5>
 <p>与吞吐量关系密切，故也称为吞吐量优先收集器</p>
@@ -712,10 +712,10 @@ B--&gt;A
 <p><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/images/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png"
-        data-srcset="/images/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png, /images/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png 1.5x, /images/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png 2x"
+        data-src="/images/jvm/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png"
+        data-srcset="/images/jvm/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png, /images/jvm/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png 1.5x, /images/jvm/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png 2x"
         data-sizes="auto"
-        alt="/images/响应时间优先.png"
+        alt="/images/jvm/响应时间优先.png"
         title="avator" /></p>
 <h5 id="cms-收集器">CMS 收集器</h5>
 <p>Concurrent Mark Sweep，一种以获取<strong>最短回收停顿时间</strong>为目标的<strong>老年代</strong>收集器</p>
