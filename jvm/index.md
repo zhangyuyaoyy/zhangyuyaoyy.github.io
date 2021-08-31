@@ -300,7 +300,7 @@ String s6 = s5.intern();
 
    ![avator](/images/jvm/串行.png)
 
-   安全点**：让其他线程都在这个点停下来，以免垃圾回收时移动对象地址，使得其他线程找不到被移动的对象
+   **安全点**：让其他线程都在这个点停下来，以免垃圾回收时移动对象地址，使得其他线程找不到被移动的对象
 
    因为是串行的，所以只有一个垃圾回收线程。且在该线程执行回收工作时，其他线程进入**阻塞**状态
 
@@ -386,6 +386,152 @@ String s6 = s5.intern();
    CMS收集器的内存回收过程是与用户线程一起**并发执行**的
 
 #### G.1 Garbage First
+
+- JDK9默认
+
+##### 适用场景
+
+- 同时注重吞吐量（Throughput）和低延迟（Low latency），默认暂停目标是200ms；
+- 超大堆内存，会将堆划分为多个大小相等的Region
+- 整体上是标记-整理算法，两个Region之间是复制算法
+
+##### 相关参数
+
+- -XX:+UseG1GC 
+
+- -XX:G1HeapRegionSize=size 
+
+- -XX:MaxGCPauseMillis=time
+
+##### G1垃圾回收阶段
+
+![avatar](/images/jvm/G1.png)
+
+##### Young Collection
+
+- 会STW
+
+![avatar](/images/jvm/G1_YoungCollection.png)
+
+![avatar](/images/jvm/G1_YoungCollection_1.png)
+
+![avatar](/images/jvm/G1_YoungCollection_2.png)
+
+##### Young Collection + CM
+
+- 在 Young GC 时会进行 GC Root 的初始标记
+
+- 老年代占用堆空间比例达到阈值时，进行并发标记（不会 STW），阈值由下面的 JVM 参数决定
+
+  -XX:InitiatingHeapOccupancyPercent=percent （默认45%）
+
+![avatar](/images/jvm/G1_CM_1.png)
+
+##### Mixed Collection
+
+会对E、S、O进行全面回收
+
+- 最终标记（Remark）会STW
+- 拷贝存活（Evacuation）会STW
+
+![avatar](/images/jvm/G1_Mixed.png)
+
+##### FullGC
+
+- SerialGC
+  - 新生代内存不足发生的垃圾收集 - minor gc
+  - 老年代内存不足发生的垃圾收集 - full gc
+
+- ParallelGC
+  - 新生代内存不足发生的垃圾收集 - minor gc
+  - 老年代内存不足发生的垃圾收集 - full gc
+
+- CMS
+  - 新生代内存不足发生的垃圾收集 - minor gc
+  - 老年代内存不足
+    - 垃圾回收速度小于垃圾生产速度时，转化为SerialGC-full gc
+
+- G1
+- 新生代内存不足发生的垃圾收集 - minor gc
+- 老年代内存不足
+  - 垃圾回收速度小于垃圾生产速度时，转化为SerialGC-full gc
+
+##### Young Collection 跨代引用
+
+- 卡表与 Remembered Set
+
+- 在引用变更时通过 post-write barrier + dirty card queue 
+
+- concurrent refinement threads 更新 Remembered Set
+
+![avatar](/images/jvm/跨代引用.png)
+
+![avatar](/images/jvm/跨代引用_2.png)
+
+##### Remark
+
+- pre-write barrier + satb_mark_queue
+
+![avatar](/images/jvm/Remark.png)
+
+##### JDK 8u20 字符串去重
+
+- 优点：节省大量内存
+
+- 缺点：略微多占用了 cpu 时间，新生代回收时间略微增加
+
+- 参数：-XX:+UseStringDeduplication
+
+- ```java
+  String s1 = new String("hello"); // char[]{'h','e','l','l','o'} 
+  String s2 = new String("hello"); // char[]{'h','e','l','l','o'}
+  ```
+
+- 将所有新分配的字符串放入一个队列
+
+- 当新生代回收时，G1并发检查是否有字符串重复
+
+- 如果它们值一样，让它们引用同一个 char[]
+
+- 与 String.intern() 不一样
+
+  - String.intern() 关注的是字符串对象
+  - 字符串去重关注的是 char[]
+  - 在 JVM 内部，使用了不同的字符串表
+
+#####  JDK 8u40 并发标记类卸载
+
+- 所有对象都经过并发标记后，就能知道哪些类不再被使用，当一个类加载器的所有类都不再使用，则卸载它所加载的所有类
+-  -XX:+ClassUnloadingWithConcurrentMark 默认启用
+- 自定义类加载器
+
+ ##### JDK 8u60 回收巨型对象
+
+- 一个对象大于 region 的一半时，称之为巨型对象
+- G1 不会对巨型对象进行拷贝
+- 回收时被优先考虑
+- G1 会跟踪老年代所有 incoming 引用，这样老年代 incoming 引用为0 的巨型对象就可以在新生
+- 代垃圾回收时处理掉
+- ![avatar](/images/jvm/巨型对象.png)
+
+##### JDK9 并发标记起始时间的调整
+
+- 并发标记必须在堆空间占满前完成，否则退化为 FullGC
+- JDK 9 之前需要使用 -XX:InitiatingHeapOccupancyPercent
+- JDK 9 可以动态调整 
+  - -XX:InitiatingHeapOccupancyPercent 用来设置初始值
+  - 进行数据采样并动态调整
+  - 总会添加一个安全的空档空间
+
+##### JDK9 更高效回收
+
+- 250+增强
+- 180+bug修复
+- https://docs.oracle.com/en/java/javase/12/gctuning
+
+
+
+
 
 
 

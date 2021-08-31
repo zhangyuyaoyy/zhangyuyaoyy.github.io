@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/"
-        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  391 ,
+        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  568 ,
         "url": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/","datePublished": "2021-08-26T14:15:15+08:00","dateModified": "2021-08-26T14:15:15+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "zhangyuyao","logo": "https:\/\/zhangyuyaoyy.gitee.io\/images\/avatar.png"},"author": {
@@ -108,8 +108,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">JVM</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><i class="far fa-folder fa-fw"></i>学习笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 391 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 568 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>目录</span>
@@ -208,7 +208,24 @@
                 <li><a href="#cms-收集器">CMS 收集器</a></li>
               </ul>
             </li>
-            <li><a href="#g1-garbage-first">G.1 Garbage First</a></li>
+            <li><a href="#g1-garbage-first">G.1 Garbage First</a>
+              <ul>
+                <li><a href="#适用场景">适用场景</a></li>
+                <li><a href="#相关参数-1">相关参数</a></li>
+                <li><a href="#g1垃圾回收阶段">G1垃圾回收阶段</a></li>
+                <li><a href="#young-collection">Young Collection</a></li>
+                <li><a href="#young-collection--cm">Young Collection + CM</a></li>
+                <li><a href="#mixed-collection">Mixed Collection</a></li>
+                <li><a href="#fullgc">FullGC</a></li>
+                <li><a href="#young-collection-跨代引用">Young Collection 跨代引用</a></li>
+                <li><a href="#remark">Remark</a></li>
+                <li><a href="#jdk-8u20-字符串去重">JDK 8u20 字符串去重</a></li>
+                <li><a href="#jdk-8u40-并发标记类卸载">JDK 8u40 并发标记类卸载</a></li>
+                <li><a href="#jdk-8u60-回收巨型对象">JDK 8u60 回收巨型对象</a></li>
+                <li><a href="#jdk9-并发标记起始时间的调整">JDK9 并发标记起始时间的调整</a></li>
+                <li><a href="#jdk9-更高效回收">JDK9 更高效回收</a></li>
+              </ul>
+            </li>
           </ul>
         </li>
         <li><a href="#垃圾回收调优">垃圾回收调优</a></li>
@@ -650,7 +667,7 @@ B--&gt;A
         data-sizes="auto"
         alt="/images/jvm/串行.png"
         title="avator" /></p>
-<p>安全点**：让其他线程都在这个点停下来，以免垃圾回收时移动对象地址，使得其他线程找不到被移动的对象</p>
+<p><strong>安全点</strong>：让其他线程都在这个点停下来，以免垃圾回收时移动对象地址，使得其他线程找不到被移动的对象</p>
 <p>因为是串行的，所以只有一个垃圾回收线程。且在该线程执行回收工作时，其他线程进入<strong>阻塞</strong>状态</p>
 <h5 id="serial-收集器">Serial 收集器</h5>
 <p>Serial收集器是最基本的、发展历史最悠久的收集器</p>
@@ -730,6 +747,257 @@ B--&gt;A
 </li>
 </ul>
 <h4 id="g1-garbage-first">G.1 Garbage First</h4>
+<ul>
+<li>JDK9默认</li>
+</ul>
+<h5 id="适用场景">适用场景</h5>
+<ul>
+<li>同时注重吞吐量（Throughput）和低延迟（Low latency），默认暂停目标是200ms；</li>
+<li>超大堆内存，会将堆划分为多个大小相等的Region</li>
+<li>整体上是标记-整理算法，两个Region之间是复制算法</li>
+</ul>
+<h5 id="相关参数-1">相关参数</h5>
+<ul>
+<li>
+<p>-XX:+UseG1GC</p>
+</li>
+<li>
+<p>-XX:G1HeapRegionSize=size</p>
+</li>
+<li>
+<p>-XX:MaxGCPauseMillis=time</p>
+</li>
+</ul>
+<h5 id="g1垃圾回收阶段">G1垃圾回收阶段</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/G1.png"
+        data-srcset="/images/jvm/G1.png, /images/jvm/G1.png 1.5x, /images/jvm/G1.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/G1.png"
+        title="avatar" /></p>
+<h5 id="young-collection">Young Collection</h5>
+<ul>
+<li>会STW</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/G1_YoungCollection.png"
+        data-srcset="/images/jvm/G1_YoungCollection.png, /images/jvm/G1_YoungCollection.png 1.5x, /images/jvm/G1_YoungCollection.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/G1_YoungCollection.png"
+        title="avatar" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/G1_YoungCollection_1.png"
+        data-srcset="/images/jvm/G1_YoungCollection_1.png, /images/jvm/G1_YoungCollection_1.png 1.5x, /images/jvm/G1_YoungCollection_1.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/G1_YoungCollection_1.png"
+        title="avatar" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/G1_YoungCollection_2.png"
+        data-srcset="/images/jvm/G1_YoungCollection_2.png, /images/jvm/G1_YoungCollection_2.png 1.5x, /images/jvm/G1_YoungCollection_2.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/G1_YoungCollection_2.png"
+        title="avatar" /></p>
+<h5 id="young-collection--cm">Young Collection + CM</h5>
+<ul>
+<li>
+<p>在 Young GC 时会进行 GC Root 的初始标记</p>
+</li>
+<li>
+<p>老年代占用堆空间比例达到阈值时，进行并发标记（不会 STW），阈值由下面的 JVM 参数决定</p>
+<p>-XX:InitiatingHeapOccupancyPercent=percent （默认45%）</p>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/G1_CM_1.png"
+        data-srcset="/images/jvm/G1_CM_1.png, /images/jvm/G1_CM_1.png 1.5x, /images/jvm/G1_CM_1.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/G1_CM_1.png"
+        title="avatar" /></p>
+<h5 id="mixed-collection">Mixed Collection</h5>
+<p>会对E、S、O进行全面回收</p>
+<ul>
+<li>最终标记（Remark）会STW</li>
+<li>拷贝存活（Evacuation）会STW</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/G1_Mixed.png"
+        data-srcset="/images/jvm/G1_Mixed.png, /images/jvm/G1_Mixed.png 1.5x, /images/jvm/G1_Mixed.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/G1_Mixed.png"
+        title="avatar" /></p>
+<h5 id="fullgc">FullGC</h5>
+<ul>
+<li>
+<p>SerialGC</p>
+<ul>
+<li>新生代内存不足发生的垃圾收集 - minor gc</li>
+<li>老年代内存不足发生的垃圾收集 - full gc</li>
+</ul>
+</li>
+<li>
+<p>ParallelGC</p>
+<ul>
+<li>新生代内存不足发生的垃圾收集 - minor gc</li>
+<li>老年代内存不足发生的垃圾收集 - full gc</li>
+</ul>
+</li>
+<li>
+<p>CMS</p>
+<ul>
+<li>新生代内存不足发生的垃圾收集 - minor gc</li>
+<li>老年代内存不足
+<ul>
+<li>垃圾回收速度小于垃圾生产速度时，转化为SerialGC-full gc</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>G1</p>
+</li>
+<li>
+<p>新生代内存不足发生的垃圾收集 - minor gc</p>
+</li>
+<li>
+<p>老年代内存不足</p>
+<ul>
+<li>垃圾回收速度小于垃圾生产速度时，转化为SerialGC-full gc</li>
+</ul>
+</li>
+</ul>
+<h5 id="young-collection-跨代引用">Young Collection 跨代引用</h5>
+<ul>
+<li>
+<p>卡表与 Remembered Set</p>
+</li>
+<li>
+<p>在引用变更时通过 post-write barrier + dirty card queue</p>
+</li>
+<li>
+<p>concurrent refinement threads 更新 Remembered Set</p>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8.png"
+        data-srcset="/images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8.png, /images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8.png 1.5x, /images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/跨代引用.png"
+        title="avatar" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8_2.png"
+        data-srcset="/images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8_2.png, /images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8_2.png 1.5x, /images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8_2.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/跨代引用_2.png"
+        title="avatar" /></p>
+<h5 id="remark">Remark</h5>
+<ul>
+<li>pre-write barrier + satb_mark_queue</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/Remark.png"
+        data-srcset="/images/jvm/Remark.png, /images/jvm/Remark.png 1.5x, /images/jvm/Remark.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/Remark.png"
+        title="avatar" /></p>
+<h5 id="jdk-8u20-字符串去重">JDK 8u20 字符串去重</h5>
+<ul>
+<li>
+<p>优点：节省大量内存</p>
+</li>
+<li>
+<p>缺点：略微多占用了 cpu 时间，新生代回收时间略微增加</p>
+</li>
+<li>
+<p>参数：-XX:+UseStringDeduplication</p>
+</li>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">s1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">&#34;hello&#34;</span><span class="o">);</span> <span class="c1">// char[]{&#39;h&#39;,&#39;e&#39;,&#39;l&#39;,&#39;l&#39;,&#39;o&#39;} 
+</span><span class="c1"></span><span class="n">String</span> <span class="n">s2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">&#34;hello&#34;</span><span class="o">);</span> <span class="c1">// char[]{&#39;h&#39;,&#39;e&#39;,&#39;l&#39;,&#39;l&#39;,&#39;o&#39;}
+</span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>将所有新分配的字符串放入一个队列</p>
+</li>
+<li>
+<p>当新生代回收时，G1并发检查是否有字符串重复</p>
+</li>
+<li>
+<p>如果它们值一样，让它们引用同一个 char[]</p>
+</li>
+<li>
+<p>与 String.intern() 不一样</p>
+<ul>
+<li>String.intern() 关注的是字符串对象</li>
+<li>字符串去重关注的是 char[]</li>
+<li>在 JVM 内部，使用了不同的字符串表</li>
+</ul>
+</li>
+</ul>
+<h5 id="jdk-8u40-并发标记类卸载">JDK 8u40 并发标记类卸载</h5>
+<ul>
+<li>所有对象都经过并发标记后，就能知道哪些类不再被使用，当一个类加载器的所有类都不再使用，则卸载它所加载的所有类</li>
+<li>-XX:+ClassUnloadingWithConcurrentMark 默认启用</li>
+<li>自定义类加载器</li>
+</ul>
+<h5 id="jdk-8u60-回收巨型对象">JDK 8u60 回收巨型对象</h5>
+<ul>
+<li>一个对象大于 region 的一半时，称之为巨型对象</li>
+<li>G1 不会对巨型对象进行拷贝</li>
+<li>回收时被优先考虑</li>
+<li>G1 会跟踪老年代所有 incoming 引用，这样老年代 incoming 引用为0 的巨型对象就可以在新生</li>
+<li>代垃圾回收时处理掉</li>
+<li><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/jvm/%e5%b7%a8%e5%9e%8b%e5%af%b9%e8%b1%a1.png"
+        data-srcset="/images/jvm/%e5%b7%a8%e5%9e%8b%e5%af%b9%e8%b1%a1.png, /images/jvm/%e5%b7%a8%e5%9e%8b%e5%af%b9%e8%b1%a1.png 1.5x, /images/jvm/%e5%b7%a8%e5%9e%8b%e5%af%b9%e8%b1%a1.png 2x"
+        data-sizes="auto"
+        alt="/images/jvm/巨型对象.png"
+        title="avatar" /></li>
+</ul>
+<h5 id="jdk9-并发标记起始时间的调整">JDK9 并发标记起始时间的调整</h5>
+<ul>
+<li>并发标记必须在堆空间占满前完成，否则退化为 FullGC</li>
+<li>JDK 9 之前需要使用 -XX:InitiatingHeapOccupancyPercent</li>
+<li>JDK 9 可以动态调整
+<ul>
+<li>-XX:InitiatingHeapOccupancyPercent 用来设置初始值</li>
+<li>进行数据采样并动态调整</li>
+<li>总会添加一个安全的空档空间</li>
+</ul>
+</li>
+</ul>
+<h5 id="jdk9-更高效回收">JDK9 更高效回收</h5>
+<ul>
+<li>250+增强</li>
+<li>180+bug修复</li>
+<li><a href="https://docs.oracle.com/en/java/javase/12/gctuning" target="_blank" rel="noopener noreffer">https://docs.oracle.com/en/java/javase/12/gctuning</a></li>
+</ul>
 <h3 id="垃圾回收调优">垃圾回收调优</h3></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
