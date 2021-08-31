@@ -449,12 +449,12 @@ String s6 = s5.intern();
 - CMS
   - 新生代内存不足发生的垃圾收集 - minor gc
   - 老年代内存不足
-    - 垃圾回收速度小于垃圾生产速度时，转化为SerialGC-full gc
+    - 垃圾回收速度小于垃圾生产速度时，转化为SerialGC - full gc
 
 - G1
   - 新生代内存不足发生的垃圾收集 - minor gc
   - 老年代内存不足
-    - 垃圾回收速度小于垃圾生产速度时，转化为SerialGC-full gc
+    - 垃圾回收速度小于垃圾生产速度时，转化为SerialGC - full gc
 
 ##### Young Collection 跨代引用
 
@@ -529,16 +529,81 @@ String s6 = s5.intern();
 - 180+bug修复
 - https://docs.oracle.com/en/java/javase/12/gctuning
 
-
-
-
-
-
-
-
-
-
-
 ### 垃圾回收调优
+
+#### 调优领域
+
+- 内存
+- 锁竞争
+- cpu占用
+- io
+
+#### 确定目标
+
+- **低延迟**还是**高吞吐量**，选择合适的回收器
+- 低延迟：CMS、G1、ZGC
+- 高吞吐量：ParallelGC
+
+#### 最快的GC是不发生GC
+
+- 查看Full GC前后，内存的占用，考虑几个问题
+  - 数据是不是太多？
+    - resultSet = statement.executeQuery("select * from 大表 limit n")
+  - 数据表示是否太臃肿？
+    - 对象图
+    - 对象大小 最小：16；Integer：24；int：4
+  - 是否存在内存泄漏？
+    - static Map map =
+    - 软
+    - 弱
+    - 第三方缓存实现
+
+#### 新生代调优
+
+- 新生代特点
+
+  - 所有new操作分配的内存都非常低廉
+    - TLAB thread-local allocation buffer
+  - 死亡对象的回收代价是零
+  - 大部分对象用过即死
+  - Minor GC的时间远远低于Full GC
+
+- 新生代GC时，大部分时间耗费在复制上。
+
+- 新生代能容纳所有**并发量*(响应-请求)**
+
+- 幸存区大到能保留**当前活跃对象+需要晋升对象**
+
+- 晋升阈值配置得当，让长时间存活对象尽快晋升
+
+  -XX:MaxTenuringThreshold=threshold 
+
+  -XX:+PrintTenuringDistribution
+
+  ```bash
+  Desired survivor size 48286924 bytes, new threshold 10 (max 10) 
+  - age 1: 28992024 bytes, 28992024 total 
+  - age 2: 1366864 bytes, 30358888 total 
+  - age 3: 1425912 bytes, 31784800 total 
+  ...
+  ```
+
+#### 老年代调优
+
+以CMS为例
+
+- CMS老年代内存越大越好
+
+- 先尝试不做调优，如果没有 Full GC，则不是Full GC引起的，调优因先尝试调新生代
+
+- 观察发生 Full GC 时老年代内存占用，将老年代内存预设调大 1/4 ~ 1/3
+
+  ```bash
+  -XX:CMSInitiatingOccupancyFraction=percent
+  ```
+
+  
+
+
 
 
