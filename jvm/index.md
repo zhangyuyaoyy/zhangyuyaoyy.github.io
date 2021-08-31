@@ -452,9 +452,9 @@ String s6 = s5.intern();
     - 垃圾回收速度小于垃圾生产速度时，转化为SerialGC-full gc
 
 - G1
-- 新生代内存不足发生的垃圾收集 - minor gc
-- 老年代内存不足
-  - 垃圾回收速度小于垃圾生产速度时，转化为SerialGC-full gc
+  - 新生代内存不足发生的垃圾收集 - minor gc
+  - 老年代内存不足
+    - 垃圾回收速度小于垃圾生产速度时，转化为SerialGC-full gc
 
 ##### Young Collection 跨代引用
 
