@@ -20,7 +20,7 @@
 <meta name="application-name" content="zhangyuyao">
 <meta name="apple-mobile-web-app-title" content="zhangyuyao"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhangyuyaoyy.gitee.io/jvm/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhangyuyaoyy.gitee.io/jvm/" /><link rel="next" href="https://zhangyuyaoyy.gitee.io/%E5%AE%B6%E8%A3%85%E6%B8%85%E5%8D%95/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/"
-        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  676 ,
+        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  678 ,
         "url": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/","datePublished": "2021-08-26T14:15:15+08:00","dateModified": "2021-08-26T14:15:15+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "zhangyuyao","logo": "https:\/\/zhangyuyaoyy.gitee.io\/images\/avatar.png"},"author": {
@@ -108,7 +108,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">JVM</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><i class="far fa-folder fa-fw"></i>学习笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 676 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 678 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -237,6 +237,11 @@
             <li><a href="#老年代调优">老年代调优</a></li>
           </ul>
         </li>
+      </ul>
+    </li>
+    <li><a href="#类加载和字节码技术">类加载和字节码技术</a>
+      <ul>
+        <li><a href="#类文件结构">类文件结构</a></li>
       </ul>
     </li>
   </ul>
@@ -549,14 +554,14 @@ B--&gt;A
 <li>
 <p>强引用</p>
 <ul>
-<li>只有所有 GC Roots 对象都不通过【强引用】引用该对象，该对象才能被垃圾回收</li>
+<li>只有所有 GC Roots 对象都不通过<strong>强引用</strong>引用该对象，该对象才能被垃圾回收</li>
 </ul>
 </li>
 <li>
 <p>软引用</p>
 <ul>
 <li>
-<p>仅有软引用引用该对象时，在垃圾回收后，内存仍不足时会再次出发垃圾回收，回收软引用</p>
+<p>仅有软引用引用该对象时，在垃圾回收后，内存仍不足时，会再次出发垃圾回收，回收软引用</p>
 </li>
 <li>
 <p>对象可以配合引用队列来释放软引用自身</p>
@@ -599,8 +604,8 @@ B--&gt;A
 <h3 id="分代回收">分代回收</h3>
 <h4 id="定义-5">定义</h4>
 <ul>
-<li>对象首先分配在伊甸园区域</li>
-<li>新生代空间不足时，触发 minor gc，伊甸园和 from 存活的对象使用 copy 复制到 to 中，存活的</li>
+<li>对象首先分配在eden区</li>
+<li>新生代空间不足时，触发 minor gc，eden区和 from 存活的对象使用 copy 复制到 to 中，存活的</li>
 <li>对象年龄加 1并且交换 from to</li>
 <li>minor gc 会引发 stop the world，暂停其它用户的线程，等垃圾回收结束，用户线程才恢复运行</li>
 <li>当对象寿命超过阈值时，会晋升至老年代，最大寿命是15（4bit）</li>
@@ -679,7 +684,7 @@ B--&gt;A
 <p>因为是串行的，所以只有一个垃圾回收线程。且在该线程执行回收工作时，其他线程进入<strong>阻塞</strong>状态</p>
 <h5 id="serial-收集器">Serial 收集器</h5>
 <p>Serial收集器是最基本的、发展历史最悠久的收集器</p>
-<p><strong>特点：<strong>单线程、简单高效（与其他收集器的单线程相比），采用</strong>复制算法</strong>。对于限定单个CPU的环境来说，Serial收集器由于没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程手机效率。收集器进行垃圾回收时，必须暂停其他所有的工作线程，直到它结束（Stop The World）</p>
+<p><strong>特点：<strong>单线程、简单高效（与其他收集器的单线程相比），采用</strong>复制算法</strong>。对于限定单个CPU的环境来说，Serial收集器由于没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程回收效率。收集器进行垃圾回收时，必须暂停其他所有的工作线程，直到它结束（Stop The World）</p>
 <h5 id="parnew-收集器">ParNew 收集器</h5>
 <p>ParNew收集器其实就是Serial收集器的多线程版本</p>
 <p><strong>特点</strong>：多线程、ParNew收集器默认开启的收集线程数与CPU的数量相同，在CPU非常多的环境中，可以使用-XX:ParallelGCThreads参数来限制垃圾收集的线程数。和Serial收集器一样存在Stop The World问题</p>
@@ -1111,7 +1116,9 @@ B--&gt;A
 </code></pre></td></tr></table>
 </div>
 </div></li>
-</ul></div><div class="post-footer" id="post-footer">
+</ul>
+<h2 id="类加载和字节码技术">类加载和字节码技术</h2>
+<h3 id="类文件结构">类文件结构</h3></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
@@ -1136,7 +1143,8 @@ B--&gt;A
         </section>
     </div>
 
-    <div class="post-nav"></div>
+    <div class="post-nav">
+            <a href="/%E5%AE%B6%E8%A3%85%E6%B8%85%E5%8D%95/" class="next" rel="next" title="家装清单">家装清单<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
