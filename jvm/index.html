@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/"
-        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  678 ,
+        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  730 ,
         "url": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/","datePublished": "2021-08-26T14:15:15+08:00","dateModified": "2021-08-26T14:15:15+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "zhangyuyao","logo": "https:\/\/zhangyuyaoyy.gitee.io\/images\/avatar.png"},"author": {
@@ -108,7 +108,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">JVM</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><i class="far fa-folder fa-fw"></i>学习笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 678 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 730 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -1118,7 +1118,50 @@ B--&gt;A
 </div></li>
 </ul>
 <h2 id="类加载和字节码技术">类加载和字节码技术</h2>
-<h3 id="类文件结构">类文件结构</h3></div><div class="post-footer" id="post-footer">
+<h3 id="类文件结构">类文件结构</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">ClassFIle</span><span class="o">{</span>
+  <span class="n">u4</span>						 <span class="n">magic</span><span class="o">;</span>
+  <span class="n">u2</span>						 <span class="n">minor_version</span><span class="o">;</span>
+  <span class="n">u2</span>						 <span class="n">major_version</span><span class="o">;</span>
+  <span class="n">u2</span>						 <span class="n">constant_pool_count</span><span class="o">;</span>
+  <span class="n">cp_info</span>				 <span class="n">constant_pool</span><span class="o">[</span><span class="n">constant_pool_count</span><span class="o">-</span><span class="n">1</span><span class="o">];</span>
+  <span class="n">u2</span>						 <span class="n">access_flags</span><span class="o">;</span>
+  <span class="n">u2</span>						 <span class="n">this_class</span><span class="o">;</span>
+  <span class="n">u2</span>						 <span class="n">super_class</span><span class="o">;</span>
+  <span class="n">u2</span> 						 <span class="n">interfaces_count</span><span class="o">;</span>
+  <span class="n">u2</span> 						 <span class="n">interfaces</span><span class="o">[</span><span class="n">interfaces_count</span><span class="o">];</span>
+  <span class="n">u2</span> 						 <span class="n">fields_count</span><span class="o">;</span>
+  <span class="n">field_info</span> 		 <span class="n">fields</span><span class="o">[</span><span class="n">fields_count</span><span class="o">];</span>
+  <span class="n">u2</span> 						 <span class="n">methods_count</span><span class="o">;</span>
+  <span class="n">method_info</span>    <span class="n">methods</span><span class="o">[</span><span class="n">methods_count</span><span class="o">];</span>
+  <span class="n">u2</span> 						 <span class="n">attributes_count</span><span class="o">;</span>
+  <span class="n">attribute_info</span> <span class="n">attributes</span><span class="o">[</span><span class="n">attributes_count</span><span class="o">];</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
