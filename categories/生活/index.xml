@@ -1,15 +1,20 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>生活 - 分类 - zhangyuyao</title>
-        <link>https://zhangyuyaoyy.gitee.io/categories/%E7%94%9F%E6%B4%BB/</link>
-        <description>生活 - 分类 - zhangyuyao</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>20431508@qq.com (zhangyuyao)</managingEditor>
-            <webMaster>20431508@qq.com (zhangyuyao)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 03 Sep 2021 10:49:36 &#43;0800</lastBuildDate><atom:link href="https://zhangyuyaoyy.gitee.io/categories/%E7%94%9F%E6%B4%BB/" rel="self" type="application/rss+xml" /><item>
-    <title>家装清单</title>
-    <link>https://zhangyuyaoyy.gitee.io/%E5%AE%B6%E8%A3%85%E6%B8%85%E5%8D%95/</link>
-    <pubDate>Fri, 03 Sep 2021 10:49:36 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>https://zhangyuyaoyy.gitee.io/%E5%AE%B6%E8%A3%85%E6%B8%85%E5%8D%95/</guid>
-    <description><![CDATA[<h4 id="超过预算的家装清单">超过预算的家装清单</h4>]]></description>
-</item></channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>生活 on zhangyuyao</title>
+    <link>http://localhost:1313/categories/%E7%94%9F%E6%B4%BB/</link>
+    <description>Recent content in 生活 on zhangyuyao</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 03 Sep 2021 10:49:36 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/%E7%94%9F%E6%B4%BB/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>家装清单</title>
+      <link>http://localhost:1313/posts/%E5%AE%B6%E8%A3%85%E6%B8%85%E5%8D%95/</link>
+      <pubDate>Fri, 03 Sep 2021 10:49:36 +0800</pubDate>
+      
+      <guid>http://localhost:1313/posts/%E5%AE%B6%E8%A3%85%E6%B8%85%E5%8D%95/</guid>
+      <description>&lt;h4 id=&#34;超过预算的家装清单&#34;&gt;超过预算的家装清单&lt;/h4&gt;</description>
+    </item>
+    
+  </channel>
 </rss>

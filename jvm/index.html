@@ -1,270 +1,2394 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>JVM - zhangyuyao</title><meta name="Description" content="zhangyuyao的个人博客"><meta property="og:title" content="JVM" />
-<meta property="og:description" content="本内容根据B站黑马程序员JVM完整教程整理记录。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://zhangyuyaoyy.gitee.io/jvm/" /><meta property="og:image" content="https://zhangyuyaoyy.gitee.io/logo.png"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-08-26T14:15:15+08:00" />
-<meta property="article:modified_time" content="2021-08-26T14:15:15+08:00" />
+<html><head>
+<title>JVM</title>
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://zhangyuyaoyy.gitee.io/logo.png"/>
 
-<meta name="twitter:title" content="JVM"/>
-<meta name="twitter:description" content="本内容根据B站黑马程序员JVM完整教程整理记录。"/>
-<meta name="application-name" content="zhangyuyao">
-<meta name="apple-mobile-web-app-title" content="zhangyuyao"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhangyuyaoyy.gitee.io/jvm/" /><link rel="next" href="https://zhangyuyaoyy.gitee.io/%E5%AE%B6%E8%A3%85%E6%B8%85%E5%8D%95/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "JVM",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/"
-        },"image": ["https:\/\/zhangyuyaoyy.gitee.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "java, jvm","wordcount":  730 ,
-        "url": "https:\/\/zhangyuyaoyy.gitee.io\/jvm\/","datePublished": "2021-08-26T14:15:15+08:00","dateModified": "2021-08-26T14:15:15+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
-            "@type": "Organization",
-            "name": "zhangyuyao","logo": "https:\/\/zhangyuyaoyy.gitee.io\/images\/avatar.png"},"author": {
-                "@type": "Person",
-                "name": "zhangyuyao"
-            },"description": ""
-    }
-    </script></head>
-    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="https://zhangyuyaoyy.gitee.io/scss/journal.min.3f72a5fc8f5b5dd732a4b476aced0eece2156958d9d414316494ddb10593ddf7.css" integrity="sha256-P3Kl/I9bXdcypLR2rO0O7OIVaVjZ1BQxZJTdsQWT3fc=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://zhangyuyaoyy.gitee.io/scss/dark-mode.min.f7c2efa7183435a6bd1842f91c541481c7a5137b5991629a870f24e4a516ad4b.css" integrity="sha256-98Lvpxg0Naa9GEL5HFQUgcelE3tZkWKahw8k5KUWrUs=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
     
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="zhangyuyao"><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>zhangyuyao</a>
+    <a class="a-block nav-head false" href="https://zhangyuyaoyy.gitee.io/">
+    
+        <div class="nav-title">
+            zhangyuyao
         </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/categories/documentation/"> 文档 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
-                            <i class="fas fa-search fa-fw"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
-                            <i class="fas fa-times-circle fa-fw"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
-                        </span>
-                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
-                    <i class="fas fa-adjust fa-fw"></i>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/posts/">
+                所有文章
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags/">
+                标签
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories/">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories/documentation/">
+                文档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about/">
+                关于
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+ <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>  <a href="https://amazingrise.net">Rise</a>
+<br>
+ <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>-  -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#jvm" onclick="onNavClick(`#jvm-nav`)" id="jvm-nav">
+									JVM
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%86%85%e5%ad%98%e7%bb%93%e6%9e%84" onclick="onNavClick(`#内存结构-nav`)" id="内存结构-nav">
+									内存结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%a8%8b%e5%ba%8f%e8%ae%a1%e6%95%b0%e5%99%a8" onclick="onNavClick(`#程序计数器-nav`)" id="程序计数器-nav">
+									程序计数器
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%a0%88" onclick="onNavClick(`#虚拟机栈-nav`)" id="虚拟机栈-nav">
+									虚拟机栈
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89" onclick="onNavClick(`#定义-nav`)" id="定义-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%97%ae%e9%a2%98%e8%be%a8%e6%9e%90" onclick="onNavClick(`#问题辨析-nav`)" id="问题辨析-nav">
+									问题辨析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%a0%88%e5%86%85%e5%ad%98%e6%ba%a2%e5%87%ba" onclick="onNavClick(`#栈内存溢出-nav`)" id="栈内存溢出-nav">
+									栈内存溢出
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%ba%bf%e7%a8%8b%e8%af%8a%e6%96%ad" onclick="onNavClick(`#线程诊断-nav`)" id="线程诊断-nav">
+									线程诊断
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%ac%e5%9c%b0%e6%96%b9%e6%b3%95%e6%a0%88" onclick="onNavClick(`#本地方法栈-nav`)" id="本地方法栈-nav">
+									本地方法栈
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89-1" onclick="onNavClick(`#定义-1-nav`)" id="定义-1-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%a0%86" onclick="onNavClick(`#堆-nav`)" id="堆-nav">
+									堆
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89-2" onclick="onNavClick(`#定义-2-nav`)" id="定义-2-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a0%86%e5%86%85%e5%ad%98%e6%ba%a2%e5%87%ba" onclick="onNavClick(`#堆内存溢出-nav`)" id="堆内存溢出-nav">
+									堆内存溢出
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a0%86%e5%86%85%e5%ad%98%e8%af%8a%e6%96%ad" onclick="onNavClick(`#堆内存诊断-nav`)" id="堆内存诊断-nav">
+									堆内存诊断
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%89%b9%e7%82%b9" onclick="onNavClick(`#特点-nav`)" id="特点-nav">
+									特点
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%96%b9%e6%b3%95%e5%8c%ba" onclick="onNavClick(`#方法区-nav`)" id="方法区-nav">
+									方法区
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%b9%e6%b3%95%e5%8c%ba%e5%86%85%e5%ad%98%e6%ba%a2%e5%87%ba" onclick="onNavClick(`#方法区内存溢出-nav`)" id="方法区内存溢出-nav">
+									方法区内存溢出
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%90%e8%a1%8c%e6%97%b6%e5%b8%b8%e9%87%8f%e6%b1%a0" onclick="onNavClick(`#运行时常量池-nav`)" id="运行时常量池-nav">
+									运行时常量池
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#stringtable" onclick="onNavClick(`#stringtable-nav`)" id="stringtable-nav">
+									StringTable
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%89%b9%e6%80%a7" onclick="onNavClick(`#特性-nav`)" id="特性-nav">
+									特性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#stringtable%e4%bd%8d%e7%bd%ae" onclick="onNavClick(`#stringtable位置-nav`)" id="stringtable位置-nav">
+									StringTable位置
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#stringtable%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e5%8f%8a%e8%b0%83%e4%bc%98" onclick="onNavClick(`#stringtable垃圾回收及调优-nav`)" id="stringtable垃圾回收及调优-nav">
+									StringTable垃圾回收及调优
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%b4%e6%8e%a5%e5%86%85%e5%ad%98" onclick="onNavClick(`#直接内存-nav`)" id="直接内存-nav">
+									直接内存
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89-4" onclick="onNavClick(`#定义-4-nav`)" id="定义-4-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6" onclick="onNavClick(`#垃圾回收-nav`)" id="垃圾回收-nav">
+									垃圾回收
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%a6%82%e4%bd%95%e5%88%a4%e6%96%ad%e5%af%b9%e8%b1%a1%e5%8f%af%e4%bb%a5%e5%9b%9e%e6%94%b6" onclick="onNavClick(`#如何判断对象可以回收-nav`)" id="如何判断对象可以回收-nav">
+									如何判断对象可以回收
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%bc%95%e7%94%a8%e8%ae%a1%e6%95%b0%e6%b3%95" onclick="onNavClick(`#引用计数法-nav`)" id="引用计数法-nav">
+									引用计数法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%af%e8%be%be%e6%80%a7%e5%88%86%e6%9e%90" onclick="onNavClick(`#可达性分析-nav`)" id="可达性分析-nav">
+									可达性分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%ba%94%e7%a7%8d%e5%bc%95%e7%94%a8" onclick="onNavClick(`#五种引用-nav`)" id="五种引用-nav">
+									五种引用
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#垃圾回收算法-nav`)" id="垃圾回收算法-nav">
+									垃圾回收算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a0%87%e8%ae%b0%e6%b8%85%e9%99%a4" onclick="onNavClick(`#标记清除-nav`)" id="标记清除-nav">
+									标记清除
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%a0%87%e8%ae%b0%e6%95%b4%e7%90%86%e6%a0%87%e8%ae%b0%e5%8e%8b%e7%bc%a9" onclick="onNavClick(`#标记整理标记压缩-nav`)" id="标记整理标记压缩-nav">
+									标记整理(标记压缩)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%8d%e5%88%b6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#复制算法-nav`)" id="复制算法-nav">
+									复制算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e4%bb%a3%e5%9b%9e%e6%94%b6" onclick="onNavClick(`#分代回收-nav`)" id="分代回收-nav">
+									分代回收
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89-5" onclick="onNavClick(`#定义-5-nav`)" id="定义-5-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%b8%e5%85%b3%e5%8f%82%e6%95%b0" onclick="onNavClick(`#相关参数-nav`)" id="相关参数-nav">
+									相关参数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e5%99%a8" onclick="onNavClick(`#垃圾回收器-nav`)" id="垃圾回收器-nav">
+									垃圾回收器
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%b8%b2%e8%a1%8c" onclick="onNavClick(`#串行-nav`)" id="串行-nav">
+									串行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88" onclick="onNavClick(`#吞吐量优先-nav`)" id="吞吐量优先-nav">
+									吞吐量优先
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88" onclick="onNavClick(`#响应时间优先-nav`)" id="响应时间优先-nav">
+									响应时间优先
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#g1-garbage-first" onclick="onNavClick(`#g1-garbage-first-nav`)" id="g1-garbage-first-nav">
+									G.1 Garbage First
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e8%b0%83%e4%bc%98" onclick="onNavClick(`#垃圾回收调优-nav`)" id="垃圾回收调优-nav">
+									垃圾回收调优
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b0%83%e4%bc%98%e9%a2%86%e5%9f%9f" onclick="onNavClick(`#调优领域-nav`)" id="调优领域-nav">
+									调优领域
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a1%ae%e5%ae%9a%e7%9b%ae%e6%a0%87" onclick="onNavClick(`#确定目标-nav`)" id="确定目标-nav">
+									确定目标
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%80%e5%bf%ab%e7%9a%84gc%e6%98%af%e4%b8%8d%e5%8f%91%e7%94%9fgc" onclick="onNavClick(`#最快的gc是不发生gc-nav`)" id="最快的gc是不发生gc-nav">
+									最快的GC是不发生GC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%b0%e7%94%9f%e4%bb%a3%e8%b0%83%e4%bc%98" onclick="onNavClick(`#新生代调优-nav`)" id="新生代调优-nav">
+									新生代调优
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%80%81%e5%b9%b4%e4%bb%a3%e8%b0%83%e4%bc%98" onclick="onNavClick(`#老年代调优-nav`)" id="老年代调优-nav">
+									老年代调优
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%b1%bb%e5%8a%a0%e8%bd%bd%e5%92%8c%e5%ad%97%e8%8a%82%e7%a0%81%e6%8a%80%e6%9c%af" onclick="onNavClick(`#类加载和字节码技术-nav`)" id="类加载和字节码技术-nav">
+									类加载和字节码技术
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%b1%bb%e6%96%87%e4%bb%b6%e7%bb%93%e6%9e%84" onclick="onNavClick(`#类文件结构-nav`)" id="类文件结构-nav">
+									类文件结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/posts/">
+                    所有文章
                 </a>
-            </div>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags/">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories/">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories/documentation/">
+                    文档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about/">
+                    关于
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>-  -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#jvm" onclick="onNavClick(`#jvm-nav`)" id="jvm-nav">
+									JVM
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%86%85%e5%ad%98%e7%bb%93%e6%9e%84" onclick="onNavClick(`#内存结构-nav`)" id="内存结构-nav">
+									内存结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%a8%8b%e5%ba%8f%e8%ae%a1%e6%95%b0%e5%99%a8" onclick="onNavClick(`#程序计数器-nav`)" id="程序计数器-nav">
+									程序计数器
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%a0%88" onclick="onNavClick(`#虚拟机栈-nav`)" id="虚拟机栈-nav">
+									虚拟机栈
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89" onclick="onNavClick(`#定义-nav`)" id="定义-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%97%ae%e9%a2%98%e8%be%a8%e6%9e%90" onclick="onNavClick(`#问题辨析-nav`)" id="问题辨析-nav">
+									问题辨析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%a0%88%e5%86%85%e5%ad%98%e6%ba%a2%e5%87%ba" onclick="onNavClick(`#栈内存溢出-nav`)" id="栈内存溢出-nav">
+									栈内存溢出
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%ba%bf%e7%a8%8b%e8%af%8a%e6%96%ad" onclick="onNavClick(`#线程诊断-nav`)" id="线程诊断-nav">
+									线程诊断
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%ac%e5%9c%b0%e6%96%b9%e6%b3%95%e6%a0%88" onclick="onNavClick(`#本地方法栈-nav`)" id="本地方法栈-nav">
+									本地方法栈
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89-1" onclick="onNavClick(`#定义-1-nav`)" id="定义-1-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%a0%86" onclick="onNavClick(`#堆-nav`)" id="堆-nav">
+									堆
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89-2" onclick="onNavClick(`#定义-2-nav`)" id="定义-2-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a0%86%e5%86%85%e5%ad%98%e6%ba%a2%e5%87%ba" onclick="onNavClick(`#堆内存溢出-nav`)" id="堆内存溢出-nav">
+									堆内存溢出
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a0%86%e5%86%85%e5%ad%98%e8%af%8a%e6%96%ad" onclick="onNavClick(`#堆内存诊断-nav`)" id="堆内存诊断-nav">
+									堆内存诊断
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%89%b9%e7%82%b9" onclick="onNavClick(`#特点-nav`)" id="特点-nav">
+									特点
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%96%b9%e6%b3%95%e5%8c%ba" onclick="onNavClick(`#方法区-nav`)" id="方法区-nav">
+									方法区
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%b9%e6%b3%95%e5%8c%ba%e5%86%85%e5%ad%98%e6%ba%a2%e5%87%ba" onclick="onNavClick(`#方法区内存溢出-nav`)" id="方法区内存溢出-nav">
+									方法区内存溢出
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%90%e8%a1%8c%e6%97%b6%e5%b8%b8%e9%87%8f%e6%b1%a0" onclick="onNavClick(`#运行时常量池-nav`)" id="运行时常量池-nav">
+									运行时常量池
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#stringtable" onclick="onNavClick(`#stringtable-nav`)" id="stringtable-nav">
+									StringTable
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%89%b9%e6%80%a7" onclick="onNavClick(`#特性-nav`)" id="特性-nav">
+									特性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#stringtable%e4%bd%8d%e7%bd%ae" onclick="onNavClick(`#stringtable位置-nav`)" id="stringtable位置-nav">
+									StringTable位置
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#stringtable%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e5%8f%8a%e8%b0%83%e4%bc%98" onclick="onNavClick(`#stringtable垃圾回收及调优-nav`)" id="stringtable垃圾回收及调优-nav">
+									StringTable垃圾回收及调优
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%b4%e6%8e%a5%e5%86%85%e5%ad%98" onclick="onNavClick(`#直接内存-nav`)" id="直接内存-nav">
+									直接内存
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89-4" onclick="onNavClick(`#定义-4-nav`)" id="定义-4-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6" onclick="onNavClick(`#垃圾回收-nav`)" id="垃圾回收-nav">
+									垃圾回收
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%a6%82%e4%bd%95%e5%88%a4%e6%96%ad%e5%af%b9%e8%b1%a1%e5%8f%af%e4%bb%a5%e5%9b%9e%e6%94%b6" onclick="onNavClick(`#如何判断对象可以回收-nav`)" id="如何判断对象可以回收-nav">
+									如何判断对象可以回收
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%bc%95%e7%94%a8%e8%ae%a1%e6%95%b0%e6%b3%95" onclick="onNavClick(`#引用计数法-nav`)" id="引用计数法-nav">
+									引用计数法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%af%e8%be%be%e6%80%a7%e5%88%86%e6%9e%90" onclick="onNavClick(`#可达性分析-nav`)" id="可达性分析-nav">
+									可达性分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%ba%94%e7%a7%8d%e5%bc%95%e7%94%a8" onclick="onNavClick(`#五种引用-nav`)" id="五种引用-nav">
+									五种引用
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#垃圾回收算法-nav`)" id="垃圾回收算法-nav">
+									垃圾回收算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a0%87%e8%ae%b0%e6%b8%85%e9%99%a4" onclick="onNavClick(`#标记清除-nav`)" id="标记清除-nav">
+									标记清除
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%a0%87%e8%ae%b0%e6%95%b4%e7%90%86%e6%a0%87%e8%ae%b0%e5%8e%8b%e7%bc%a9" onclick="onNavClick(`#标记整理标记压缩-nav`)" id="标记整理标记压缩-nav">
+									标记整理(标记压缩)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%8d%e5%88%b6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#复制算法-nav`)" id="复制算法-nav">
+									复制算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e4%bb%a3%e5%9b%9e%e6%94%b6" onclick="onNavClick(`#分代回收-nav`)" id="分代回收-nav">
+									分代回收
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e4%b9%89-5" onclick="onNavClick(`#定义-5-nav`)" id="定义-5-nav">
+									定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%b8%e5%85%b3%e5%8f%82%e6%95%b0" onclick="onNavClick(`#相关参数-nav`)" id="相关参数-nav">
+									相关参数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e5%99%a8" onclick="onNavClick(`#垃圾回收器-nav`)" id="垃圾回收器-nav">
+									垃圾回收器
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%b8%b2%e8%a1%8c" onclick="onNavClick(`#串行-nav`)" id="串行-nav">
+									串行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88" onclick="onNavClick(`#吞吐量优先-nav`)" id="吞吐量优先-nav">
+									吞吐量优先
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88" onclick="onNavClick(`#响应时间优先-nav`)" id="响应时间优先-nav">
+									响应时间优先
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#g1-garbage-first" onclick="onNavClick(`#g1-garbage-first-nav`)" id="g1-garbage-first-nav">
+									G.1 Garbage First
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e8%b0%83%e4%bc%98" onclick="onNavClick(`#垃圾回收调优-nav`)" id="垃圾回收调优-nav">
+									垃圾回收调优
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b0%83%e4%bc%98%e9%a2%86%e5%9f%9f" onclick="onNavClick(`#调优领域-nav`)" id="调优领域-nav">
+									调优领域
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a1%ae%e5%ae%9a%e7%9b%ae%e6%a0%87" onclick="onNavClick(`#确定目标-nav`)" id="确定目标-nav">
+									确定目标
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%80%e5%bf%ab%e7%9a%84gc%e6%98%af%e4%b8%8d%e5%8f%91%e7%94%9fgc" onclick="onNavClick(`#最快的gc是不发生gc-nav`)" id="最快的gc是不发生gc-nav">
+									最快的GC是不发生GC
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%b0%e7%94%9f%e4%bb%a3%e8%b0%83%e4%bc%98" onclick="onNavClick(`#新生代调优-nav`)" id="新生代调优-nav">
+									新生代调优
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%80%81%e5%b9%b4%e4%bb%a3%e8%b0%83%e4%bc%98" onclick="onNavClick(`#老年代调优-nav`)" id="老年代调优-nav">
+									老年代调优
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%b1%bb%e5%8a%a0%e8%bd%bd%e5%92%8c%e5%ad%97%e8%8a%82%e7%a0%81%e6%8a%80%e6%9c%af" onclick="onNavClick(`#类加载和字节码技术-nav`)" id="类加载和字节码技术-nav">
+									类加载和字节码技术
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%b1%bb%e6%96%87%e4%bb%b6%e7%bb%93%e6%9e%84" onclick="onNavClick(`#类文件结构-nav`)" id="类文件结构-nav">
+									类文件结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
         </div>
     </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="zhangyuyao"><span class="header-title-pre"><i class='far fa-kiss-wink-heart fa-fw'></i></span>zhangyuyao</a>
-            </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
-                            <i class="fas fa-search fa-fw"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
-                            <i class="fas fa-times-circle fa-fw"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
-                        </span>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://zhangyuyaoyy.gitee.io/">
+            zhangyuyao
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://zhangyuyaoyy.gitee.io/">
+        <div class="single-column-header-title">zhangyuyao</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    JVM
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[学习笔记]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/java">java</a>
+                                &nbsp;
+                            
+                                <a href="/tags/jvm">jvm</a>
+                                &nbsp;
+                            
+                        
+                        
                     </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-                        取消
-                    </a>
-                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/categories/documentation/" title="">文档</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
-                <i class="fas fa-adjust fa-fw"></i>
-            </a></div>
-    </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">目录</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">JVM</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="20431508@qq.com" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>zhangyuyao</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><i class="far fa-folder fa-fw"></i>学习笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-26">2021-08-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 730 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
-                <div class="details-summary toc-title">
-                    <span>目录</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
-  <ul>
-    <li><a href="#jvm">JVM</a></li>
-    <li><a href="#内存结构">内存结构</a>
-      <ul>
-        <li><a href="#程序计数器">程序计数器</a></li>
-        <li><a href="#虚拟机栈">虚拟机栈</a>
-          <ul>
-            <li><a href="#定义">定义</a></li>
-            <li><a href="#问题辨析">问题辨析</a></li>
-            <li><a href="#栈内存溢出">栈内存溢出</a></li>
-            <li><a href="#线程诊断">线程诊断</a></li>
-          </ul>
-        </li>
-        <li><a href="#本地方法栈">本地方法栈</a>
-          <ul>
-            <li><a href="#定义-1">定义</a></li>
-          </ul>
-        </li>
-        <li><a href="#堆">堆</a>
-          <ul>
-            <li><a href="#定义-2">定义</a></li>
-            <li><a href="#堆内存溢出">堆内存溢出</a></li>
-            <li><a href="#堆内存诊断">堆内存诊断</a></li>
-            <li><a href="#特点">特点</a></li>
-          </ul>
-        </li>
-        <li><a href="#方法区">方法区</a>
-          <ul>
-            <li><a href="#方法区内存溢出">方法区内存溢出</a></li>
-            <li><a href="#运行时常量池">运行时常量池</a>
-              <ul>
-                <li><a href="#定义-3">定义</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li><a href="#stringtable">StringTable</a>
-          <ul>
-            <li><a href="#特性">特性</a></li>
-            <li><a href="#stringtable位置">StringTable位置</a></li>
-            <li><a href="#stringtable垃圾回收及调优">StringTable垃圾回收及调优</a></li>
-          </ul>
-        </li>
-        <li><a href="#直接内存">直接内存</a>
-          <ul>
-            <li><a href="#定义-4">定义</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-    <li><a href="#垃圾回收">垃圾回收</a>
-      <ul>
-        <li><a href="#如何判断对象可以回收">如何判断对象可以回收</a>
-          <ul>
-            <li><a href="#引用计数法">引用计数法</a></li>
-            <li><a href="#可达性分析">可达性分析</a></li>
-            <li><a href="#五种引用">五种引用</a></li>
-          </ul>
-        </li>
-        <li><a href="#垃圾回收算法">垃圾回收算法</a>
-          <ul>
-            <li><a href="#标记清除">标记清除</a></li>
-            <li><a href="#标记整理标记压缩">标记整理(标记压缩)</a></li>
-            <li><a href="#复制算法">复制算法</a></li>
-          </ul>
-        </li>
-        <li><a href="#分代回收">分代回收</a>
-          <ul>
-            <li><a href="#定义-5">定义</a></li>
-            <li><a href="#相关参数">相关参数</a></li>
-          </ul>
-        </li>
-        <li><a href="#垃圾回收器">垃圾回收器</a>
-          <ul>
-            <li><a href="#串行">串行</a>
-              <ul>
-                <li><a href="#serial-收集器">Serial 收集器</a></li>
-                <li><a href="#parnew-收集器">ParNew 收集器</a></li>
-                <li><a href="#serial-old-收集器">Serial Old 收集器</a></li>
-              </ul>
-            </li>
-            <li><a href="#吞吐量优先">吞吐量优先</a>
-              <ul>
-                <li><a href="#parallel-scavenge-收集器">Parallel Scavenge 收集器</a></li>
-                <li><a href="#parallel-old-收集器"><strong>Parallel Old 收集器</strong></a></li>
-              </ul>
-            </li>
-            <li><a href="#响应时间优先">响应时间优先</a>
-              <ul>
-                <li><a href="#cms-收集器">CMS 收集器</a></li>
-              </ul>
-            </li>
-            <li><a href="#g1-garbage-first">G.1 Garbage First</a>
-              <ul>
-                <li><a href="#适用场景">适用场景</a></li>
-                <li><a href="#相关参数-1">相关参数</a></li>
-                <li><a href="#g1垃圾回收阶段">G1垃圾回收阶段</a></li>
-                <li><a href="#young-collection">Young Collection</a></li>
-                <li><a href="#young-collection--cm">Young Collection + CM</a></li>
-                <li><a href="#mixed-collection">Mixed Collection</a></li>
-                <li><a href="#fullgc">FullGC</a></li>
-                <li><a href="#young-collection-跨代引用">Young Collection 跨代引用</a></li>
-                <li><a href="#remark">Remark</a></li>
-                <li><a href="#jdk-8u20-字符串去重">JDK 8u20 字符串去重</a></li>
-                <li><a href="#jdk-8u40-并发标记类卸载">JDK 8u40 并发标记类卸载</a></li>
-                <li><a href="#jdk-8u60-回收巨型对象">JDK 8u60 回收巨型对象</a></li>
-                <li><a href="#jdk9-并发标记起始时间的调整">JDK9 并发标记起始时间的调整</a></li>
-                <li><a href="#jdk9-更高效回收">JDK9 更高效回收</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li><a href="#垃圾回收调优">垃圾回收调优</a>
-          <ul>
-            <li><a href="#调优领域">调优领域</a></li>
-            <li><a href="#确定目标">确定目标</a></li>
-            <li><a href="#最快的gc是不发生gc">最快的GC是不发生GC</a></li>
-            <li><a href="#新生代调优">新生代调优</a></li>
-            <li><a href="#老年代调优">老年代调优</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-    <li><a href="#类加载和字节码技术">类加载和字节码技术</a>
-      <ul>
-        <li><a href="#类文件结构">类文件结构</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav></div>
-            </div><div class="content" id="content"><p>本内容根据B站<a href="https://www.bilibili.com/video/BV1yE411Z7AP" target="_blank" rel="noopener noreffer">黑马程序员JVM完整教程</a>整理记录。</p>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>本内容根据B站<a href="https://www.bilibili.com/video/BV1yE411Z7AP">黑马程序员JVM完整教程</a>整理记录。</p>
 <h2 id="jvm">JVM</h2>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/JVM%e7%bb%84%e6%88%90.png"
-        data-srcset="/images/jvm/JVM%e7%bb%84%e6%88%90.png, /images/jvm/JVM%e7%bb%84%e6%88%90.png 1.5x, /images/jvm/JVM%e7%bb%84%e6%88%90.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/JVM组成.png"
-        title="avator" /></p>
+<p><img src="/images/jvm/JVM%E7%BB%84%E6%88%90.png" alt="avator"></p>
 <h2 id="内存结构">内存结构</h2>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/%e5%86%85%e5%ad%98%e7%bb%93%e6%9e%84.png"
-        data-srcset="/images/jvm/%e5%86%85%e5%ad%98%e7%bb%93%e6%9e%84.png, /images/jvm/%e5%86%85%e5%ad%98%e7%bb%93%e6%9e%84.png 1.5x, /images/jvm/%e5%86%85%e5%ad%98%e7%bb%93%e6%9e%84.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/内存结构.png"
-        title="avator" /></p>
+<p><img src="/images/jvm/%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png" alt="avator"></p>
 <h3 id="程序计数器">程序计数器</h3>
 <p>程序计数器通过寄存器实现</p>
 <p>作用：记录下一条JVM指令执行的地址</p>
@@ -486,23 +2610,9 @@
 <li>分配回收成本较高，但读写性能好</li>
 <li>不会被GC直接回收  // 通过unsafe释放内存，Cleaner是一个虚引用，当java对象被回收时触发直接内存回收。</li>
 <li>IO操作:
-<img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/IO%e6%93%8d%e4%bd%9c.png"
-        data-srcset="/images/jvm/IO%e6%93%8d%e4%bd%9c.png, /images/jvm/IO%e6%93%8d%e4%bd%9c.png 1.5x, /images/jvm/IO%e6%93%8d%e4%bd%9c.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/IO操作.png"
-        title="avatar" /></li>
+<img src="/images/jvm/IO%E6%93%8D%E4%BD%9C.png" alt="avatar"></li>
 <li>直接内存
-<img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/%e7%9b%b4%e6%8e%a5%e5%86%85%e5%ad%98.png"
-        data-srcset="/images/jvm/%e7%9b%b4%e6%8e%a5%e5%86%85%e5%ad%98.png, /images/jvm/%e7%9b%b4%e6%8e%a5%e5%86%85%e5%ad%98.png 1.5x, /images/jvm/%e7%9b%b4%e6%8e%a5%e5%86%85%e5%ad%98.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/直接内存.png"
-        title="avatar" /></li>
+<img src="/images/jvm/%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98.png" alt="avatar"></li>
 </ul>
 <h2 id="垃圾回收">垃圾回收</h2>
 <h3 id="如何判断对象可以回收">如何判断对象可以回收</h3>
@@ -542,14 +2652,7 @@ B--&gt;A
 <li>可以通过Memary Analysis(MAT)查看GC ROOT</li>
 </ul>
 <h4 id="五种引用">五种引用</h4>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/%e4%ba%94%e7%a7%8d%e5%bc%95%e7%94%a8.png"
-        data-srcset="/images/jvm/%e4%ba%94%e7%a7%8d%e5%bc%95%e7%94%a8.png, /images/jvm/%e4%ba%94%e7%a7%8d%e5%bc%95%e7%94%a8.png 1.5x, /images/jvm/%e4%ba%94%e7%a7%8d%e5%bc%95%e7%94%a8.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/五种引用.png"
-        title="avatar" /></p>
+<p><img src="/images/jvm/%E4%BA%94%E7%A7%8D%E5%BC%95%E7%94%A8.png" alt="avatar"></p>
 <ol>
 <li>
 <p>强引用</p>
@@ -672,14 +2775,7 @@ B--&gt;A
 </li>
 <li>
 <p>堆内存较小，适合个人电脑</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/%e4%b8%b2%e8%a1%8c.png"
-        data-srcset="/images/jvm/%e4%b8%b2%e8%a1%8c.png, /images/jvm/%e4%b8%b2%e8%a1%8c.png 1.5x, /images/jvm/%e4%b8%b2%e8%a1%8c.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/串行.png"
-        title="avator" /></p>
+<p><img src="/images/jvm/%E4%B8%B2%E8%A1%8C.png" alt="avator"></p>
 <p><strong>安全点</strong>：让其他线程都在这个点停下来，以免垃圾回收时移动对象地址，使得其他线程找不到被移动的对象</p>
 <p>因为是串行的，所以只有一个垃圾回收线程。且在该线程执行回收工作时，其他线程进入<strong>阻塞</strong>状态</p>
 <h5 id="serial-收集器">Serial 收集器</h5>
@@ -706,14 +2802,7 @@ B--&gt;A
 </li>
 <li>
 <p>jdk1.8默认</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png"
-        data-srcset="/images/jvm/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png, /images/jvm/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png 1.5x, /images/jvm/%e5%90%9e%e5%90%90%e9%87%8f%e4%bc%98%e5%85%88.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/吞吐量优先.png"
-        title="avator" /></p>
+<p><img src="/images/jvm/%E5%90%9E%E5%90%90%E9%87%8F%E4%BC%98%E5%85%88.png" alt="avator"></p>
 <h5 id="parallel-scavenge-收集器">Parallel Scavenge 收集器</h5>
 <p>与吞吐量关系密切，故也称为吞吐量优先收集器</p>
 <p><strong>特点</strong>：属于新生代收集器也是采用<strong>复制算法</strong>的收集器（用到了新生代的幸存区），又是并行的多线程收集器（与ParNew收集器类似）</p>
@@ -739,14 +2828,7 @@ B--&gt;A
 </li>
 <li>
 <p>垃圾回收时，尽可能让单次STW时间最短</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png"
-        data-srcset="/images/jvm/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png, /images/jvm/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png 1.5x, /images/jvm/%e5%93%8d%e5%ba%94%e6%97%b6%e9%97%b4%e4%bc%98%e5%85%88.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/响应时间优先.png"
-        title="avator" /></p>
+<p><img src="/images/jvm/%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4%E4%BC%98%E5%85%88.png" alt="avator"></p>
 <h5 id="cms-收集器">CMS 收集器</h5>
 <p>Concurrent Mark Sweep，一种以获取<strong>最短回收停顿时间</strong>为目标的<strong>老年代</strong>收集器</p>
 <p><strong>特点</strong>：基于<strong>标记-清除算法</strong>实现。并发收集、低停顿，但是会产生内存碎片</p>
@@ -782,42 +2864,14 @@ B--&gt;A
 </li>
 </ul>
 <h5 id="g1垃圾回收阶段">G1垃圾回收阶段</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/G1.png"
-        data-srcset="/images/jvm/G1.png, /images/jvm/G1.png 1.5x, /images/jvm/G1.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/G1.png"
-        title="avatar" /></p>
+<p><img src="/images/jvm/G1.png" alt="avatar"></p>
 <h5 id="young-collection">Young Collection</h5>
 <ul>
 <li>会STW</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/G1_YoungCollection.png"
-        data-srcset="/images/jvm/G1_YoungCollection.png, /images/jvm/G1_YoungCollection.png 1.5x, /images/jvm/G1_YoungCollection.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/G1_YoungCollection.png"
-        title="avatar" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/G1_YoungCollection_1.png"
-        data-srcset="/images/jvm/G1_YoungCollection_1.png, /images/jvm/G1_YoungCollection_1.png 1.5x, /images/jvm/G1_YoungCollection_1.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/G1_YoungCollection_1.png"
-        title="avatar" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/G1_YoungCollection_2.png"
-        data-srcset="/images/jvm/G1_YoungCollection_2.png, /images/jvm/G1_YoungCollection_2.png 1.5x, /images/jvm/G1_YoungCollection_2.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/G1_YoungCollection_2.png"
-        title="avatar" /></p>
+<p><img src="/images/jvm/G1_YoungCollection.png" alt="avatar"></p>
+<p><img src="/images/jvm/G1_YoungCollection_1.png" alt="avatar"></p>
+<p><img src="/images/jvm/G1_YoungCollection_2.png" alt="avatar"></p>
 <h5 id="young-collection--cm">Young Collection + CM</h5>
 <ul>
 <li>
@@ -828,28 +2882,14 @@ B--&gt;A
 <p>-XX:InitiatingHeapOccupancyPercent=percent （默认45%）</p>
 </li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/G1_CM_1.png"
-        data-srcset="/images/jvm/G1_CM_1.png, /images/jvm/G1_CM_1.png 1.5x, /images/jvm/G1_CM_1.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/G1_CM_1.png"
-        title="avatar" /></p>
+<p><img src="/images/jvm/G1_CM_1.png" alt="avatar"></p>
 <h5 id="mixed-collection">Mixed Collection</h5>
 <p>会对E、S、O进行全面回收</p>
 <ul>
 <li>最终标记（Remark）会STW</li>
 <li>拷贝存活（Evacuation）会STW</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/G1_Mixed.png"
-        data-srcset="/images/jvm/G1_Mixed.png, /images/jvm/G1_Mixed.png 1.5x, /images/jvm/G1_Mixed.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/G1_Mixed.png"
-        title="avatar" /></p>
+<p><img src="/images/jvm/G1_Mixed.png" alt="avatar"></p>
 <h5 id="fullgc">FullGC</h5>
 <ul>
 <li>
@@ -901,34 +2941,13 @@ B--&gt;A
 <p>concurrent refinement threads 更新 Remembered Set</p>
 </li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8.png"
-        data-srcset="/images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8.png, /images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8.png 1.5x, /images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/跨代引用.png"
-        title="avatar" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8_2.png"
-        data-srcset="/images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8_2.png, /images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8_2.png 1.5x, /images/jvm/%e8%b7%a8%e4%bb%a3%e5%bc%95%e7%94%a8_2.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/跨代引用_2.png"
-        title="avatar" /></p>
+<p><img src="/images/jvm/%E8%B7%A8%E4%BB%A3%E5%BC%95%E7%94%A8.png" alt="avatar"></p>
+<p><img src="/images/jvm/%E8%B7%A8%E4%BB%A3%E5%BC%95%E7%94%A8_2.png" alt="avatar"></p>
 <h5 id="remark">Remark</h5>
 <ul>
 <li>pre-write barrier + satb_mark_queue</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/Remark.png"
-        data-srcset="/images/jvm/Remark.png, /images/jvm/Remark.png 1.5x, /images/jvm/Remark.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/Remark.png"
-        title="avatar" /></p>
+<p><img src="/images/jvm/Remark.png" alt="avatar"></p>
 <h5 id="jdk-8u20-字符串去重">JDK 8u20 字符串去重</h5>
 <ul>
 <li>
@@ -983,14 +3002,7 @@ B--&gt;A
 <li>回收时被优先考虑</li>
 <li>G1 会跟踪老年代所有 incoming 引用，这样老年代 incoming 引用为0 的巨型对象就可以在新生</li>
 <li>代垃圾回收时处理掉</li>
-<li><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/jvm/%e5%b7%a8%e5%9e%8b%e5%af%b9%e8%b1%a1.png"
-        data-srcset="/images/jvm/%e5%b7%a8%e5%9e%8b%e5%af%b9%e8%b1%a1.png, /images/jvm/%e5%b7%a8%e5%9e%8b%e5%af%b9%e8%b1%a1.png 1.5x, /images/jvm/%e5%b7%a8%e5%9e%8b%e5%af%b9%e8%b1%a1.png 2x"
-        data-sizes="auto"
-        alt="/images/jvm/巨型对象.png"
-        title="avatar" /></li>
+<li><img src="/images/jvm/%E5%B7%A8%E5%9E%8B%E5%AF%B9%E8%B1%A1.png" alt="avatar"></li>
 </ul>
 <h5 id="jdk9-并发标记起始时间的调整">JDK9 并发标记起始时间的调整</h5>
 <ul>
@@ -1008,7 +3020,7 @@ B--&gt;A
 <ul>
 <li>250+增强</li>
 <li>180+bug修复</li>
-<li><a href="https://docs.oracle.com/en/java/javase/12/gctuning" target="_blank" rel="noopener noreffer">https://docs.oracle.com/en/java/javase/12/gctuning</a></li>
+<li><a href="https://docs.oracle.com/en/java/javase/12/gctuning">https://docs.oracle.com/en/java/javase/12/gctuning</a></li>
 </ul>
 <h3 id="垃圾回收调优">垃圾回收调优</h3>
 <h4 id="调优领域">调优领域</h4>
@@ -1161,45 +3173,60 @@ B--&gt;A
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div></div><div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>更新于 2021-08-26</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/jvm/index.md" target="_blank">阅读原始文档</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span></span>
-            </div>
-        </div>
-    </div>
-
-    <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/java/">java</a>,&nbsp;<a href="/tags/jvm/">jvm</a></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
-        </section>
-    </div>
-
-    <div class="post-nav">
-            <a href="/%E5%AE%B6%E8%A3%85%E6%B8%85%E5%8D%95/" class="next" rel="next" title="家装清单">家装清单<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
-</article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="20431508@qq.com" target="_blank">zhangyuyao</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-        <span id="busuanzi_container_site_pv">本站访问量：<span id="busuanzi_value_site_pv"></span>次</span>&nbsp;<span id="busuanzi_container_site_uv">您是本站第 <span id="busuanzi_value_site_uv"></span> 位访问者</span>
-    </footer></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;"></p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
 
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
-                <i class="fas fa-arrow-up fa-fw"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
-                <i class="fas fa-comment fa-fw"></i>
-            </a>
-        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"search":{"algoliaAppID":"MSKMHAJR7M","algoliaIndex":"blog","algoliaSearchKey":"19c3d2e19fc8909b0e788faa8e807c49","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+                
+                <a class="newer-posts" href="https://zhangyuyaoyy.gitee.io/%E5%AE%B6%E8%A3%85%E6%B8%85%E5%8D%95/">
+			<br>家装清单
+                </a>
+                
+                
+                
+                <a class="older-posts">
+			<br>
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+ <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>  <a href="https://amazingrise.net">Rise</a>
+<br>
+ <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
 </html>

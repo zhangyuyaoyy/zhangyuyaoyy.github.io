@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hadoop on zhangyuyao</title>
+    <link>http://localhost:1313/tags/hadoop/</link>
+    <description>Recent content in hadoop on zhangyuyao</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 27 Oct 2021 16:30:26 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/hadoop/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MR提交流程</title>
+      <link>http://localhost:1313/posts/mr%E6%8F%90%E4%BA%A4%E6%B5%81%E7%A8%8B/</link>
+      <pubDate>Wed, 27 Oct 2021 16:30:26 +0800</pubDate>
+      
+      <guid>http://localhost:1313/posts/mr%E6%8F%90%E4%BA%A4%E6%B5%81%E7%A8%8B/</guid>
+      <description>&lt;p&gt;本文从源码着手，梳理MapReducer的执行流程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>MR执行流程</title>
+      <link>http://localhost:1313/posts/mr%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/</link>
+      <pubDate>Tue, 26 Oct 2021 11:30:39 +0800</pubDate>
+      
+      <guid>http://localhost:1313/posts/mr%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hive执行流程</title>
+      <link>http://localhost:1313/posts/hive%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/</link>
+      <pubDate>Tue, 26 Oct 2021 11:18:48 +0800</pubDate>
+      
+      <guid>http://localhost:1313/posts/hive%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
